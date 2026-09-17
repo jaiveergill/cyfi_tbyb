@@ -1,0 +1,256 @@
+==========================================================================
+2.5  TRANSLATED METHOD -> RUNTIME API MAP
+==========================================================================
+  generated   2026-09-17 05:42:52 UTC
+  revision    bb0a30c+dirty
+  source hash 7997af0acb94e14c  (aot_behaviour_map.py)
+  environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
+              Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
+  artifact    case2/samples/extracted/thanos.exe.so
+              422,600 bytes  sha256 6d1bc4dd02ec8cc450ac17f13a1b62b06c7afaf985dc54f0a267940b25070cbc
+
+image: case2/samples/extracted/thanos.exe.so
+  translated methods      192
+  unresolved runtime calls 304
+
+========================================================================
+ANTI-ANALYSIS  --  12 method(s)
+========================================================================
+  0x400490  MufMaOSvGyvz_IyUWqQZlcOSTLhq_Main_string__
+             -> System_Diagnostics_Process_GetCurrentProcess
+  0x40d4e0  MufMaOSvGyvz_ghEykQIAJr_aiPqAgDxThSDE
+             -> System_Diagnostics_Process_GetCurrentProcess
+  0x40d5f0  MufMaOSvGyvz_ghEykQIAJr_kNJZaDsXbWYmUdO
+             -> System_Diagnostics_Process_GetCurrentProcess
+  0x40d980  MufMaOSvGyvz_ghEykQIAJr_CmOCZJRfKEYgY
+             -> MufMaOSvGyvz_ghEykQIAJr_CheckRemoteDebuggerPresent_intptr_bool_
+             -> System_Diagnostics_Process_GetCurrentProcess
+  0x40e5b0  MufMaOSvGyvz_xxKHdLdCMeOG_bfVvoFmZrqIvYF
+             -> MufMaOSvGyvz_xxKHdLdCMeOG_NtSetInformationProcess_intptr_int_int__int
+             -> System_Diagnostics_Process_EnterDebugMode
+             -> System_Diagnostics_Process_GetCurrentProcess
+  0x4125c0  MufMaOSvGyvz_tOQtIRDNrGpD_jkSoOuByvlwrEF
+             -> MufMaOSvGyvz_tOQtIRDNrGpD_GetCurrentProcess
+  0x4130d0  MufMaOSvGyvz_MPimnsOrmpnAX_IjTKmPwIgCf_string
+             -> System_Diagnostics_Process_GetCurrentProcess
+  0x414f60  MufMaOSvGyvz_FAripJTXHNalmT_bTnVewWeool_string__
+             -> System_Diagnostics_Process_GetCurrentProcess
+  0x415a30  MufMaOSvGyvz_FAripJTXHNalmT_jihBulueichnMdbb
+             -> System_Diagnostics_Process_GetCurrentProcess
+  0x415fb0  lowFQsJSlrFgr_qMyHPNTWke_dLZDqvevdgBbx_string_string
+             -> System_Diagnostics_Process_GetProcessesByName_string
+  0x416250  lowFQsJSlrFgr_qMyHPNTWke_CusTKXtiVMDCm_string
+             -> System_Diagnostics_Process_GetCurrentProcess
+             -> System_Diagnostics_Process_GetProcessesByName_string
+  0x418050  MufMaOSvGyvz_hpvgypLXixi__cctor
+             -> _icall_native_MufMaOSvGyvz_ghEykQIAJr_CheckRemoteDebuggerPresent_intptr_bool_
+             -> _icall_native_MufMaOSvGyvz_tOQtIRDNrGpD_GetCurrentProcess
+             -> _icall_native_MufMaOSvGyvz_xxKHdLdCMeOG_NtSetInformationProcess_intptr_int_int__int
+
+========================================================================
+NETWORK  --  11 method(s)
+========================================================================
+  0x400490  MufMaOSvGyvz_IyUWqQZlcOSTLhq_Main_string__
+             -> System_Net_WebClient_DownloadString_string
+             -> wrapper_remoting_invoke_with_check_System_Net_WebClient__ctor
+  0x404fe0  MufMaOSvGyvz_IyUWqQZlcOSTLhq_TQsIfIHUHFwOo_string
+             -> System_Net_WebRequest_Create_string
+  0x4050d0  MufMaOSvGyvz_IyUWqQZlcOSTLhq_LEYLEJpRfEgTMCc
+             -> System_Net_WebRequest_Create_string
+  0x40e680  MufMaOSvGyvz_biNPKopUkiSJuO_UnNeRUofkpwgP_System_Uri
+             -> System_Net_WebClient_OpenRead_string
+             -> wrapper_remoting_invoke_with_check_System_Net_WebClient__ctor
+  0x40fd50  MufMaOSvGyvz_IxJlmmAtIYbweZ_WPuYWIHaxaiFwM
+             -> System_Net_Dns_GetHostEntry_string
+             -> System_Net_Dns_GetHostName
+  0x40ff90  MufMaOSvGyvz_IxJlmmAtIYbweZ_ebvNzgnWqxnEn_System_Uri
+             -> wrapper_remoting_invoke_with_check_System_Net_WebClient_DownloadFile_System_Uri_string
+             -> wrapper_remoting_invoke_with_check_System_Net_WebClient__ctor
+  0x412980  MufMaOSvGyvz_MfnxCHhUwIjyzc_qkCGSsikzw_string_string_string_string
+             -> System_Net_WebRequest_Create_string
+             -> wrapper_proxy_isinst_object___proxy_isinst_wrapper_System_Net_FtpWebRequest_object
+  0x412cd0  MufMaOSvGyvz_MfnxCHhUwIjyzc_OahdOXOuXvYsd_string_string_string_string
+             -> System_Net_WebRequest_Create_string
+             -> wrapper_proxy_isinst_object___proxy_isinst_wrapper_System_Net_FtpWebRequest_object
+  0x413810  MufMaOSvGyvz_OwlpRzDmPpi_KXPzXivlwAnerFl_string_string_string
+             -> System_Net_Sockets_UdpClient_Send_byte___int_string_int
+             -> System_Net_Sockets_UdpClient__ctor
+  0x4143b0  MufMaOSvGyvz_uxsJIvhyQFYmmD_YvYIrpWzUqcA_string
+             -> System_Net_Dns_GetHostEntry_System_Net_IPAddress
+  0x414d80  MufMaOSvGyvz_FAripJTXHNalmT_aCnqtSuKCmAZoP_System_Uri
+             -> wrapper_remoting_invoke_with_check_System_Net_WebClient_DownloadFile_System_Uri_string
+             -> wrapper_remoting_invoke_with_check_System_Net_WebClient__ctor
+
+========================================================================
+CRYPTOGRAPHY  --  6 method(s)
+========================================================================
+  0x403b30  MufMaOSvGyvz_IyUWqQZlcOSTLhq_DPxcFgWfJlePTF_int_int
+             -> System_Security_Cryptography_RNGCryptoServiceProvider__ctor
+  0x406e30  MufMaOSvGyvz_IyUWqQZlcOSTLhq_QCdYGIiDjEcstt_string_string_byte__
+             -> System_Security_Cryptography_Rfc2898DeriveBytes__ctor_byte___byte___int
+             -> System_Security_Cryptography_RijndaelManaged__ctor
+             -> wrapper_remoting_invoke_with_check_System_Security_Cryptography_CryptoStream__ctor_System_IO_Stream_System_Security_Cryptography_ICryptoTransform_System_Security_Cryptography_CryptoStreamMode
+  0x4075b0  MufMaOSvGyvz_IyUWqQZlcOSTLhq_KfLhmyplGPYqxR_string_string_byte__
+             -> System_Security_Cryptography_Rfc2898DeriveBytes__ctor_byte___byte___int
+             -> System_Security_Cryptography_RijndaelManaged__ctor
+             -> wrapper_remoting_invoke_with_check_System_Security_Cryptography_CryptoStream__ctor_System_IO_Stream_System_Security_Cryptography_ICryptoTransform_System_Security_Cryptography_CryptoStreamMode
+  0x40c8a0  MufMaOSvGyvz_EOjDcEpeLmEa_BkigirNyAye_int
+             -> System_Security_Cryptography_RNGCryptoServiceProvider__ctor
+  0x414670  MufMaOSvGyvz_yZSyNMrNhJ_vIrcBMpRPIYwNsX_byte___byte___byte__
+             -> System_Security_Cryptography_AesManaged__ctor
+             -> System_Security_Cryptography_DeriveBytes_Dispose
+             -> wrapper_remoting_invoke_with_check_System_Security_Cryptography_CryptoStream__ctor_System_IO_Stream_System_Security_Cryptography_ICryptoTransform_System_Security_Cryptography_CryptoStreamMode
+  0x4149e0  MufMaOSvGyvz_yZSyNMrNhJ_OgulqRNbIpMUL_byte___byte__
+             -> System_Security_Cryptography_Rfc2898DeriveBytes__ctor_byte___byte___int
+
+========================================================================
+PROCESS  --  18 method(s)
+========================================================================
+  0x400490  MufMaOSvGyvz_IyUWqQZlcOSTLhq_Main_string__
+             -> System_Diagnostics_Process_Start_string
+             -> System_Diagnostics_Process_Start_string_string
+  0x404900  MufMaOSvGyvz_IyUWqQZlcOSTLhq_tbluQOozLSqDhFc_string_string
+             -> System_Diagnostics_ProcessStartInfo_set_WindowStyle_System_Diagnostics_ProcessWindowStyle
+             -> wrapper_remoting_invoke_with_check_System_Diagnostics_Process_Start
+             -> wrapper_remoting_invoke_with_check_System_Diagnostics_Process_set_StartInfo_System_Diagnostics_ProcessStartInfo
+  0x404af0  MufMaOSvGyvz_IyUWqQZlcOSTLhq_TQpGafavBJI_string
+             -> System_Diagnostics_ProcessStartInfo_set_WindowStyle_System_Diagnostics_ProcessWindowStyle
+             -> wrapper_remoting_invoke_with_check_System_Diagnostics_Process_Start
+             -> wrapper_remoting_invoke_with_check_System_Diagnostics_Process_set_StartInfo_System_Diagnostics_ProcessStartInfo
+  0x405150  MufMaOSvGyvz_IyUWqQZlcOSTLhq_obllpHNmyTXvR
+             -> System_Diagnostics_ProcessStartInfo_set_WindowStyle_System_Diagnostics_ProcessWindowStyle
+             -> System_Diagnostics_Process_Start_System_Diagnostics_ProcessStartInfo
+  0x40cfa0  MufMaOSvGyvz_MZxLtJzLRoIRU_TRUYlwuenMOlx_string_string
+             -> System_Diagnostics_ProcessStartInfo__ctor_string_string
+             -> System_Diagnostics_ProcessStartInfo_set_WindowStyle_System_Diagnostics_ProcessWindowStyle
+             -> System_Diagnostics_Process_Start_System_Diagnostics_ProcessStartInfo
+  0x40dd60  MufMaOSvGyvz_QLRuRgFESyg_PdnmizvzKFUCL
+             -> System_Diagnostics_ProcessStartInfo_set_WindowStyle_System_Diagnostics_ProcessWindowStyle
+             -> wrapper_remoting_invoke_with_check_System_Diagnostics_Process_Start
+             -> wrapper_remoting_invoke_with_check_System_Diagnostics_Process_set_StartInfo_System_Diagnostics_ProcessStartInfo
+  0x40e470  MufMaOSvGyvz_QLRuRgFESyg_tMApihKJxn_string
+             -> System_Diagnostics_ProcessStartInfo_set_WindowStyle_System_Diagnostics_ProcessWindowStyle
+             -> wrapper_remoting_invoke_with_check_System_Diagnostics_Process_Start
+             -> wrapper_remoting_invoke_with_check_System_Diagnostics_Process_set_StartInfo_System_Diagnostics_ProcessStartInfo
+  0x4141f0  MufMaOSvGyvz_VJsusgqzfWSrbMi_DlYLhXnJueaptK
+             -> System_Diagnostics_ProcessStartInfo__ctor_string_string
+             -> System_Diagnostics_Process_Start_System_Diagnostics_ProcessStartInfo
+  0x414ea0  MufMaOSvGyvz_FAripJTXHNalmT_QmucamfUxZMxrb_string
+             -> System_Diagnostics_Process_GetProcesses
+  0x415100  MufMaOSvGyvz_FAripJTXHNalmT_xlkMLKlWGZWwZ_object
+             -> MufMaOSvGyvz_FAripJTXHNalmT_OpenProcess_int_bool_uint
+  0x415190  MufMaOSvGyvz_FAripJTXHNalmT_hudlnRxOPs_uint
+             -> MufMaOSvGyvz_FAripJTXHNalmT_OpenProcess_int_bool_uint
+  0x415490  MufMaOSvGyvz_FAripJTXHNalmT_tUqinHynNcPVsx_intptr_intptr
+             -> MufMaOSvGyvz_FAripJTXHNalmT_ReadProcessMemory_intptr_intptr_byte___int_uintptr_
+             -> MufMaOSvGyvz_FAripJTXHNalmT_WriteProcessMemory_intptr_intptr_byte___uint_uintptr_
+  0x415b70  lowFQsJSlrFgr_qMyHPNTWke_ZdomFWCkgYpQtg_intptr_intptr_uint
+             -> lowFQsJSlrFgr_qMyHPNTWke_ReadProcessMemory_intptr_intptr_byte___uint_uint_
+  0x415fb0  lowFQsJSlrFgr_qMyHPNTWke_dLZDqvevdgBbx_string_string
+             -> System_Diagnostics_Process_GetProcessesByName_string
+  0x416250  lowFQsJSlrFgr_qMyHPNTWke_CusTKXtiVMDCm_string
+             -> System_Diagnostics_Process_GetProcessesByName_string
+             -> lowFQsJSlrFgr_qMyHPNTWke_OpenProcess_int_bool_uint
+             -> lowFQsJSlrFgr_qMyHPNTWke_WriteProcessMemory_intptr_intptr_byte___uint_uint_
+  0x417c40  MufMaOSvGyvz_vuLsRXwWyejEQ_WlANBWeixWsiJ_System_Diagnostics_Process_string
+             -> System_Diagnostics_Process_GetProcesses
+  0x417d60  MufMaOSvGyvz_vuLsRXwWyejEQ_SgSstmnvQSBQg_string_string
+             -> System_Diagnostics_Process_GetProcesses
+  0x418050  MufMaOSvGyvz_hpvgypLXixi__cctor
+             -> _icall_native_MufMaOSvGyvz_FAripJTXHNalmT_OpenProcess_int_bool_uint
+             -> _icall_native_MufMaOSvGyvz_FAripJTXHNalmT_ReadProcessMemory_intptr_intptr_byte___int_uintptr_
+             -> _icall_native_MufMaOSvGyvz_FAripJTXHNalmT_WriteProcessMemory_intptr_intptr_byte___uint_uintptr_
+             -> _icall_native_lowFQsJSlrFgr_qMyHPNTWke_OpenProcess_int_bool_uint
+             -> _icall_native_lowFQsJSlrFgr_qMyHPNTWke_ReadProcessMemory_intptr_intptr_byte___uint_uint_
+             -> _icall_native_lowFQsJSlrFgr_qMyHPNTWke_WriteProcessMemory_intptr_intptr_byte___uint_uint_
+
+========================================================================
+FILESYSTEM  --  26 method(s)
+========================================================================
+  0x400490  MufMaOSvGyvz_IyUWqQZlcOSTLhq_Main_string__
+             -> System_IO_File_AppendAllText_string_string
+             -> System_IO_File_Copy_string_string_bool
+             -> System_IO_File_Delete_string
+             -> System_IO_File_Exists_string
+             -> System_IO_Path_Combine_string_string
+             -> System_IO_Path_GetFileName_string
+  0x403c10  MufMaOSvGyvz_IyUWqQZlcOSTLhq_tsTJYQCcBKUvsb_string_string___string_string___string
+             -> System_IO_Directory_GetDirectories_string
+             -> System_IO_Directory_GetFiles_string
+             -> System_IO_File_Exists_string
+             -> wrapper_remoting_invoke_with_check_System_IO_FileInfo__ctor_string
+             -> wrapper_remoting_invoke_with_check_System_IO_FileInfo_get_Length
+  0x4052f0  MufMaOSvGyvz_IyUWqQZlcOSTLhq_XfZBgoPdPvsMCS
+             -> System_IO_Path_GetTempPath
+  0x405620  MufMaOSvGyvz_IyUWqQZlcOSTLhq_iSQQzPCCLFgv_string
+             -> System_IO_File_AppendAllText_string_string
+             -> System_IO_File_Exists_string
+             -> System_IO_Path_GetTempPath
+  0x405f30  MufMaOSvGyvz_IyUWqQZlcOSTLhq_FAKScXrbtoSt_string_string___string_string___string
+             -> System_IO_File_Move_string_string
+             -> System_IO_Path_GetDirectoryName_string
+             -> wrapper_remoting_invoke_with_check_System_IO_FileStream__ctor_string_System_IO_FileMode_System_IO_FileAccess_System_IO_FileShare
+  0x406e30  MufMaOSvGyvz_IyUWqQZlcOSTLhq_QCdYGIiDjEcstt_string_string_byte__
+             -> System_IO_File_Delete_string
+             -> System_IO_File_Exists_string
+             -> System_IO_File_Move_string_string
+             -> wrapper_remoting_invoke_with_check_System_IO_FileStream__ctor_string_System_IO_FileMode
+             -> wrapper_remoting_invoke_with_check_System_IO_FileStream__ctor_string_System_IO_FileMode_System_IO_FileAccess_System_IO_FileShare
+  0x4075b0  MufMaOSvGyvz_IyUWqQZlcOSTLhq_KfLhmyplGPYqxR_string_string_byte__
+             -> System_IO_File_Move_string_string
+             -> wrapper_remoting_invoke_with_check_System_IO_FileStream__ctor_string_System_IO_FileMode
+             -> wrapper_remoting_invoke_with_check_System_IO_FileStream__ctor_string_System_IO_FileMode_System_IO_FileAccess_System_IO_FileShare
+  0x40b260  MufMaOSvGyvz_IyUWqQZlcOSTLhq_jtxivXeSYrLUbhy_WalkDirectoryTree_string
+             -> System_IO_Directory_GetDirectories_string
+             -> System_IO_Directory_GetFiles_string_string
+             -> System_IO_File_Exists_string
+  0x40be40  MufMaOSvGyvz_IyUWqQZlcOSTLhq_WbDnpXySnYPBD__WorkerCrypter2b__15_string
+             -> System_IO_File_Move_string_string
+             -> System_IO_Path_GetDirectoryName_string
+             -> wrapper_remoting_invoke_with_check_System_IO_FileStream__ctor_string_System_IO_FileMode_System_IO_FileAccess_System_IO_FileShare
+  0x40c7d0  MufMaOSvGyvz_IyUWqQZlcOSTLhq_IzImQwKqnmdl__ctor
+             -> System_IO_File_Delete_string
+  0x40c7f0  MufMaOSvGyvz_IyUWqQZlcOSTLhq_IzImQwKqnmdl__Encrypt2b__18
+             -> System_IO_File_Delete_string
+             -> System_IO_File_Exists_string
+  0x40c840  MufMaOSvGyvz_IyUWqQZlcOSTLhq_IzImQwKqnmdl__Encrypt2b__19
+             -> System_IO_File_Delete_string
+             -> System_IO_File_Exists_string
+  0x40c9c0  MufMaOSvGyvz_EOjDcEpeLmEa__ctor
+             -> System_IO_File_Open_string_System_IO_FileMode_System_IO_FileAccess_System_IO_FileShare
+  0x40c9e0  MufMaOSvGyvz_MZxLtJzLRoIRU_vtOeVWNQhPdxNt_string
+             -> System_IO_File_Open_string_System_IO_FileMode_System_IO_FileAccess_System_IO_FileShare
+  0x40d550  MufMaOSvGyvz_ghEykQIAJr_KQTbTNGxpggJ
+             -> System_IO_Path_GetPathRoot_string
+  0x40e680  MufMaOSvGyvz_biNPKopUkiSJuO_UnNeRUofkpwgP_System_Uri
+             -> System_IO_Path_Combine_string_string
+             -> System_IO_Path_GetTempPath
+  0x40e770  MufMaOSvGyvz_IxJlmmAtIYbweZ_DtsYjXXFKl
+             -> System_IO_File_Copy_string_string_bool
+             -> System_IO_File_Delete_string
+             -> System_IO_File_Exists_string
+             -> System_IO_Path_GetFileName_string
+  0x40ff30  MufMaOSvGyvz_IxJlmmAtIYbweZ_aWbHWMZJwBHx
+             -> System_IO_Path_GetRandomFileName
+  0x40ff90  MufMaOSvGyvz_IxJlmmAtIYbweZ_ebvNzgnWqxnEn_System_Uri
+             -> System_IO_Path_Combine_string_string
+             -> System_IO_Path_GetRandomFileName
+             -> System_IO_Path_GetTempPath
+  0x414a30  MufMaOSvGyvz_yZSyNMrNhJ_GoOtXsDsUX_string_int
+             -> wrapper_remoting_invoke_with_check_System_IO_FileStream__ctor_string_System_IO_FileMode_System_IO_FileAccess_System_IO_FileShare
+  0x414b00  MufMaOSvGyvz_yZSyNMrNhJ_vGnSKjsiWPsmf_string_byte__
+             -> wrapper_remoting_invoke_with_check_System_IO_FileStream__ctor_string_System_IO_FileMode_System_IO_FileAccess_System_IO_FileShare
+  0x414cf0  MufMaOSvGyvz_FAripJTXHNalmT_HVdDOGYwRUMbY
+             -> System_IO_Path_GetRandomFileName
+  0x414d80  MufMaOSvGyvz_FAripJTXHNalmT_aCnqtSuKCmAZoP_System_Uri
+             -> System_IO_Path_Combine_string_string
+             -> System_IO_Path_GetRandomFileName
+             -> System_IO_Path_GetTempPath
+  0x414f60  MufMaOSvGyvz_FAripJTXHNalmT_bTnVewWeool_string__
+             -> System_IO_Path_GetFileName_string
+  0x417180  MufMaOSvGyvz_ILwfcQVhzflf_hvKwMSNYgA_string
+             -> MufMaOSvGyvz_ILwfcQVhzflf_CreateFile_string_uint_uint_intptr_uint_uint_intptr
+             -> MufMaOSvGyvz_ILwfcQVhzflf_WriteFile_intptr_byte___uint_uint__intptr
+  0x418050  MufMaOSvGyvz_hpvgypLXixi__cctor
+             -> _icall_native_MufMaOSvGyvz_ILwfcQVhzflf_CreateFile_string_uint_uint_intptr_uint_uint_intptr
+             -> _icall_native_MufMaOSvGyvz_ILwfcQVhzflf_WriteFile_intptr_byte___uint_uint__intptr

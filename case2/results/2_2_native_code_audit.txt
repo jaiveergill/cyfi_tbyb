@@ -1,0 +1,41 @@
+==========================================================================
+2.2  NATIVE-CODE INVENTORY
+==========================================================================
+  generated   2026-09-17 05:42:37 UTC
+  revision    bb0a30c+dirty
+  source hash a01ef9edae51414e  (native_code_audit.py)
+  environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
+              Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
+  artifact    case2/samples/extracted/thanos.exe
+              84,480 bytes  sha256 58bfb9fa8889550d13f42473956dc2a7ec4f3abb18fd3faeaa38089d513c171f
+
+sample: case2/samples/extracted/thanos.exe
+
+========================================================================
+1. NATIVE CODE INVENTORY
+========================================================================
+  file size                84,480 B
+  CLI header               rva 0x2008 size 72
+  method bodies            145 total
+                              145 in section b'.text'
+  readable CIL             145 methods, 26,870 B
+  entry point stub         rva 0x15eae
+    jmp dword ptr [0x402000]   (6 bytes)
+  NATIVE CODE TOTAL        6 B = 0.007102% of the file
+  bytes in X sections      81,920  (what CFGFast is asked to analyse)
+  ratio                    1 native instruction per 13,653 executable bytes
+
+========================================================================
+2. RELOCATIONS AS CLE SEES THEM
+========================================================================
+  rva 0x15eb0 type 3  va 0x415eb0  segment ends 0x415eb4  read OK
+
+========================================================================
+3. ENTRY POINT AS ANGR SEES IT
+========================================================================
+  loaded with default options
+  entry 0x415eae  offset 0x15eae in thanos.exe (0x415eae)
+  segment containing entry: <.text | offset 0x200, vaddr 0x402000, size 0x13eb4>
+  bytes at entry via cle: ff25002040000000
+  angr block: 1 instruction(s), size 6
+    0x415eae  jmp dword ptr [0x402000]

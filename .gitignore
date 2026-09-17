@@ -1,0 +1,27 @@
+# Live malware and anything derived from it is never committed.
+# Samples are fetched from theZoo at analysis time; see README.
+probe/
+case1/samples/
+case2/samples/
+# (archived earlier drafts are kept under archive/superseded/docs/)
+
+# third-party checkouts
+case1/de4dot/
+
+# extracted payload blobs and compiled artefacts
+*.bin
+*.ViR
+*.exe
+*.so
+*.zip
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# document toolchain: kept on disk, not published
+tools/make_paper.py
+tools/md_to_docx.py
+tools/inspect_docx.py
+*.docx

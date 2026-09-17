@@ -1,0 +1,8 @@
+# CyFI "Try Before You Buy" - Windows Malware Analysis
+angr==9.3.4
+dnfile==0.18.0
+dncil==1.0.2
+pefile==2024.8.26
+capstone==5.0.9
+requests==2.34.2
+python-docx==1.2.0
