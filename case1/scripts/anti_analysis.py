@@ -8,20 +8,19 @@ over registry, WMI, CPU and MAC-address probes. The brief asks for these to be
 hooked to force the "not being analyzed" branch, and for a statement of what
 becomes reachable as a result.
 
-On this sample the answer is: nothing becomes reachable, and that is the finding.
-`isVM` has exactly one caller in the assembly, and that caller writes the answer
-into a field of the beacon. The malware *reports* whether it is running in a VM;
-it does not act on it.
+On this sample nothing becomes reachable. `isVM` has one caller, and that caller
+writes the answer into a field of the beacon. The malware reports whether it is
+running in a VM; it does not act on it.
 
-This script establishes that three ways:
+I checked this three ways:
 
   1. statically -- every call site of `isVM` in the assembly, and what the caller
      does with the result;
   2. symbolically, by running the beacon builder three times with the seven
      detectors left to the model, forced to "clean machine", and forced to
      "virtual machine", and diffing what each run produces;
-  3. by comparing coverage, so that "nothing became reachable" is a measurement
-     rather than an assertion.
+  3. by comparing coverage, so "nothing became reachable" is a number and not
+     my opinion.
 
     .venv/bin/python case1/scripts/anti_analysis.py [natural|clean|vm]
 """
@@ -191,22 +190,21 @@ def main():
     print("  No basic block, no runtime call and no outbound call becomes")
     print("  reachable that was not reachable before.  [symbolic]")
     print()
-    print("  This is a real result, not a failure to find one: the sample")
-    print("  fingerprints the environment and reports it to the operator, rather")
-    print("  than using it to evade. An analyst hooking these probes to \"unlock\"")
-    print("  hidden behaviour on this sample would unlock nothing, and the")
-    print("  measurement above is what says so.   [inference from the two above]")
+    print("  The sample fingerprints the environment and reports it to the")
+    print("  operator. It does not use the answer to evade, so hooking these")
+    print("  probes to unlock hidden behaviour unlocks nothing here.")
+    print("  [inference from the two above]")
 
     print()
     print("-" * 74)
-    print("A NOTE ON WHY THE UNFORCED ARM ALREADY SEES BOTH SIDES")
+    print("WHY THE UNFORCED ARM ALREADY SEES BOTH SIDES")
     print("-" * 74)
-    print("  Each probe ends in WMI, registry or NIC calls that this analysis")
-    print("  models rather than performs, and those models return unconstrained")
-    print("  values. Every `brtrue` in the OR chain therefore forks, so both")
-    print("  outcomes of the check are explored without forcing anything. Forcing")
-    print("  is still worth doing -- it is what makes the two outcomes separately")
-    print("  attributable -- but it is not what makes them reachable.  [symbolic]")
+    print("  Each probe ends in WMI, registry or NIC calls this analysis models")
+    print("  rather than performs, and those models return unconstrained values.")
+    print("  So every `brtrue` in the OR chain forks and both outcomes get")
+    print("  explored without forcing anything. Forcing is still worth doing --")
+    print("  it makes the two outcomes separately attributable -- but it is not")
+    print("  what makes them reachable.  [symbolic]")
     print(ledger.legend())
 
 

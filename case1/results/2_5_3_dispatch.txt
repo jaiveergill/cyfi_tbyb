@@ -1,9 +1,9 @@
 ==========================================================================
 2.5.3  COMMAND DISPATCH: symbolic TaskName over the only routine that switches on it
 ==========================================================================
-  generated   2026-09-17 05:42:35 UTC
-  revision    bb0a30c+dirty
-  source hash 56737c7a71b35dc1  (aot_bridge.py, callsite_map.py, dispatch_analysis.py, managed_call_explorer.py, managed_runtime.py)
+  generated   2026-09-21 17:33:24 UTC
+  revision    83a68d8+dirty
+  source hash 55e87bebc3947685  (aot_bridge.py, callsite_map.py, dispatch_analysis.py, managed_call_explorer.py, managed_runtime.py)
   environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
               Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
   artifact    case1/samples/extracted/Win32.GravityRAT.exe
@@ -37,7 +37,7 @@ RECONSTRUCTING THE JUMP TABLE, AND CHECKING IT
 
   Each native arm's first outgoing call is compared with the callee
   the CIL invokes first at the IL offset the switch pairs it with.
-  A pairing that merely `contains a call` is not a check; this is.
+  Checking only that an arm contains some call would pass anything.
 
       IL       arm         native first managed call                      CIL callee window at that offset                       match
       0x0057   0x00044036c LSASS_Core_Tasks_ScanManager_get_Instance      LSASS.Core.Tasks.ScanManager::get_Instance / LSASS.C   yes
@@ -69,16 +69,16 @@ COMMAND -> HANDLER, WITH A WITNESS FOR EACH
   11   StopBroadCast   default     -        -                                                    the shared tail: OnCompleted(_task, respFile)    (no arm of its own)
   12   SelfDestroy     default     -        -                                                    the shared tail: OnCompleted(_task, respFile)    (no arm of its own)
 
-  handlers reached, default (BFS)      : 8/8   steps 18  peak 15  0.8s
-  handlers reached, ManagedCallExplorer: 8/8   steps 150  peak 25  6.2s
+  handlers reached, default (BFS)      : 8/8   steps 18  peak 15  1.0s
+  handlers reached, ManagedCallExplorer: 8/8   steps 150  peak 25  5.7s
   reached only by the technique        : (none)
   reached only by the default          : (none)
 
   Both arms reach every handler. Once the jump table is reconstructed
   the switch is an ordinary 13-way branch on a symbolic value, which
-  angr's default manager forks correctly on its own. This part of the
-  result belongs to the runtime modelling, not to the technique, and
-  is reported that way.  [symbolic]
+  angr's default manager forks correctly on its own. So this part of
+  the result comes from the runtime modelling, not the technique.
+  [symbolic]
 
 --------------------------------------------------------------------------
 VALUES 8-12
@@ -91,13 +91,12 @@ VALUES 8-12
   handled here: they fall to `OnCompleted(_task, respFile)` and produce
   no action.  [static, from the switch instruction]
 
-  Scope of that statement: `get_TaskName` has two consumers in the
+  How far that goes: `get_TaskName` has two consumers in the
   assembly. This lambda is one; the other is `UpdateServer` itself,
   which uses it to build a progress string (IL 0x011C -> String.Concat
-  -> OnProgress), not to dispatch. There is no second dispatcher on
-  TaskName. The claim is bounded to the TaskName enum and to this
-  routine; it is not a claim that the build has no other command
-  surface.  [static]
+  -> OnProgress), not to dispatch. So there is no second dispatcher on
+  TaskName. That covers the TaskName enum and this routine only. The
+  build may well have another command surface elsewhere.  [static]
 
 --------------------------------------------------------------------------
 EVIDENCE CLASSES USED ABOVE
@@ -106,4 +105,4 @@ EVIDENCE CLASSES USED ABOVE
   [symbolic]    symbolic observation - produced by execution under the models listed
   [inference]   inference - argued from the two above, not directly observed
   [fixture]     supplied fixture - a value this analysis provided, not one it recovered
-  [unresolved]  unresolved - named here so that it is not mistaken for a result
+  [unresolved]  unresolved - the analysis did not recover this value

@@ -5,9 +5,9 @@ block: which artifacts were read, their hashes, which code produced the numbers
 and at what revision, what the analysis was allowed to assume, and what the
 budget was.
 
-The point is that a number in the write-up can be traced back to the conditions
-that produced it without rerunning anything, and that a number generated under
-different conditions is visibly a different number.
+So a number in the write-up can be traced back to the conditions that produced
+it without rerunning anything, and a number generated under different conditions
+looks different.
 """
 from __future__ import annotations
 
@@ -20,13 +20,13 @@ import time
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
-# Evidence classes used throughout. Every claim in the write-up is one of these.
+# Evidence classes. Every claim in the write-up is tagged with one of these.
 CLASSES = {
     "static": "static observation - read out of the PE, the metadata or the AOT image",
     "symbolic": "symbolic observation - produced by execution under the models listed",
     "inference": "inference - argued from the two above, not directly observed",
     "fixture": "supplied fixture - a value this analysis provided, not one it recovered",
-    "unresolved": "unresolved - named here so that it is not mistaken for a result",
+    "unresolved": "unresolved - the analysis did not recover this value",
 }
 
 

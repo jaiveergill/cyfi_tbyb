@@ -1,9 +1,9 @@
 ==========================================================================
 2.5.1  ANTI-ANALYSIS: GravityRat's virtualisation check, and what forcing it changes
 ==========================================================================
-  generated   2026-09-17 05:41:54 UTC
-  revision    bb0a30c+dirty
-  source hash ee9d1ee337e4bfc2  (anti_analysis.py, aot_bridge.py, callsite_map.py, managed_call_explorer.py, managed_runtime.py)
+  generated   2026-09-21 17:32:45 UTC
+  revision    83a68d8+dirty
+  source hash 2bcb8fcbac1fa55b  (anti_analysis.py, aot_bridge.py, callsite_map.py, managed_call_explorer.py, managed_runtime.py)
   environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
               Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
   artifact    case1/samples/extracted/Win32.GravityRAT.exe
@@ -83,21 +83,20 @@
   No basic block, no runtime call and no outbound call becomes
   reachable that was not reachable before.  [symbolic]
 
-  This is a real result, not a failure to find one: the sample
-  fingerprints the environment and reports it to the operator, rather
-  than using it to evade. An analyst hooking these probes to "unlock"
-  hidden behaviour on this sample would unlock nothing, and the
-  measurement above is what says so.   [inference from the two above]
+  The sample fingerprints the environment and reports it to the
+  operator. It does not use the answer to evade, so hooking these
+  probes to unlock hidden behaviour unlocks nothing here.
+  [inference from the two above]
 
 --------------------------------------------------------------------------
-A NOTE ON WHY THE UNFORCED ARM ALREADY SEES BOTH SIDES
+WHY THE UNFORCED ARM ALREADY SEES BOTH SIDES
 --------------------------------------------------------------------------
-  Each probe ends in WMI, registry or NIC calls that this analysis
-  models rather than performs, and those models return unconstrained
-  values. Every `brtrue` in the OR chain therefore forks, so both
-  outcomes of the check are explored without forcing anything. Forcing
-  is still worth doing -- it is what makes the two outcomes separately
-  attributable -- but it is not what makes them reachable.  [symbolic]
+  Each probe ends in WMI, registry or NIC calls this analysis models
+  rather than performs, and those models return unconstrained values.
+  So every `brtrue` in the OR chain forks and both outcomes get
+  explored without forcing anything. Forcing is still worth doing --
+  it makes the two outcomes separately attributable -- but it is not
+  what makes them reachable.  [symbolic]
 
 --------------------------------------------------------------------------
 EVIDENCE CLASSES USED ABOVE
@@ -106,4 +105,4 @@ EVIDENCE CLASSES USED ABOVE
   [symbolic]    symbolic observation - produced by execution under the models listed
   [inference]   inference - argued from the two above, not directly observed
   [fixture]     supplied fixture - a value this analysis provided, not one it recovered
-  [unresolved]  unresolved - named here so that it is not mistaken for a result
+  [unresolved]  unresolved - the analysis did not recover this value

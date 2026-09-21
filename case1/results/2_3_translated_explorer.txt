@@ -1,9 +1,9 @@
 ==========================================================================
 2.3  WHAT TRANSLATION BUYS, AND WHERE IT STOPS
 ==========================================================================
-  generated   2026-09-17 05:37:56 UTC
-  revision    bb0a30c+dirty
-  source hash d4e39e986f4d8a1c  (aot_bridge.py, managed_runtime.py, translated_explorer.py)
+  generated   2026-09-21 17:29:50 UTC
+  revision    83a68d8+dirty
+  source hash 9eab193b3005b20e  (aot_bridge.py, managed_runtime.py, translated_explorer.py)
   environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
               Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
   artifact    case1/samples/extracted/Win32.GravityRAT.exe
@@ -51,7 +51,7 @@ C. WITH THE FULL RUNTIME MODEL (tools/managed_runtime.py)
   steps run 12 of 50
   stashes   {}   errored 1
 
-  Modelling alone gets the state into the method and no further: the
+  Modelling alone gets the state into the method and no further. The
   first `callvirt` is an indirect branch through a vtable that does
-  not exist, and no amount of modelling the *callee* helps, because
-  the problem is not knowing which callee it is.  [symbolic]
+  not exist, and modelling the callee cannot help when the problem is
+  not knowing which callee it is.  [symbolic]

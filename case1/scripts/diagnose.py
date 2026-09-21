@@ -10,8 +10,8 @@ Three questions, in order:
   3. Is there a problem of the shape an ExplorationTechnique classically
      addresses -- path explosion, environment forking, a search-order failure?
 
-The answers decide what the technique is allowed to do. They are what rejected
-the two earlier designs recorded in `archive/superseded/`.
+The answers decide what the technique is allowed to do, and they are what
+rejected the two earlier designs in `archive/superseded/`.
 
     .venv/bin/python case1/scripts/diagnose.py
 """
@@ -214,7 +214,7 @@ def main():
     print("2. IS THE LOSS RECOVERABLE BY CHOOSING A TARGET?")
     print("-" * 74)
     print("  Measured two ways, because the answer depends on how uninitialised")
-    print("  memory is modelled, and both ways lead to the same conclusion.")
+    print("  memory is modelled. Both ways agree.")
     print()
     for label, key in (("angr's default (an unmapped read yields a fresh symbol)",
                         "sound_default"),
@@ -230,19 +230,19 @@ def main():
               f"  : {narrowed}")
         print()
     print("  Under angr's default the branch register is a fresh symbol nothing")
-    print("  constrains, so the solver will accept any address at all: choosing")
-    print("  one *invents* a path, and behaviour reported from it could be")
-    print("  behaviour the sample never performs. Under the zero-fill model the")
-    print("  branch register is concretely zero, which is not a target either.")
-    print("  In neither case does the state contain the answer.  [symbolic]")
+    print("  constrains, so the solver accepts any address at all. Picking one")
+    print("  invents a path, and the sample may never perform what gets reported")
+    print("  from it. Under the zero-fill model the register is concretely zero,")
+    print("  which is no better. Either way the state does not hold the answer.")
+    print("  [symbolic]")
     print()
     print("  This is what rejected the first design, which recovered states from")
     print("  `unconstrained` by pinning the program counter to plausible in-image")
     print("  methods (kept in archive/superseded/tools/managed_explorer.py).")
     print()
-    print("  The corollary is the one the final design rests on: the missing")
-    print("  information is not in the state, so it has to come from outside it")
-    print("  -- from the original assembly's metadata.")
+    print("  Which is what the final design rests on: the missing information")
+    print("  is not in the state, so it has to come from outside -- from the")
+    print("  original assembly's metadata.")
 
     print()
     print("-" * 74)
@@ -260,10 +260,9 @@ def main():
     print("  is what rejected the second design (LossAvoidingExplorer, kept in")
     print("  archive/superseded/case1_scripts/).  [symbolic]")
     print()
-    print("  The caveat matters and is kept in the write-up: explosion cannot be")
-    print("  observed in code that is never reached. These numbers are taken with")
-    print("  the boundary repaired, which is the only condition under which they")
-    print("  mean anything, but the budget is still 60 steps per entry point.")
+    print("  One caveat, kept in the write-up: you cannot see explosion in code")
+    print("  that is never reached. These numbers are taken with the boundary")
+    print("  repaired, but the budget is still 60 steps per entry point.")
 
     print()
     print("-" * 74)
@@ -275,12 +274,11 @@ def main():
     for why, n in reasons:
         print(f"      {n:>4}  {why}")
     print()
-    print("  Distinguishing these matters because they call for different")
-    print("  repairs: a symbolic receiver is the downstream consequence of an")
+    print("  These need different repairs. A symbolic receiver comes from an")
     print("  earlier unmodelled call, an untyped receiver is an allocator or")
     print("  metadata gap, and an unrecognised dispatch shape is a decoding gap.")
-    print("  Lumping them together as 'unconstrained' is what makes the failure")
-    print("  look like one problem when it is several.  [symbolic]")
+    print("  Lumped together as 'unconstrained' they look like one problem when")
+    print("  they are three.  [symbolic]")
 
     print()
     print("-" * 74)
@@ -294,16 +292,15 @@ def main():
     print(f"  allocation sites carrying a type           : {len(rt.alloc_types):,}")
     print()
     print("  On the paths measured above the receiver-directed lookup resolved")
-    print("  nothing, and the diagnostics say why: the receivers arriving at")
-    print("  unresolved sites are objects returned by *unmodelled managed calls*,")
+    print("  nothing. The diagnostics say why: the receivers arriving at")
+    print("  unresolved sites are objects returned by unmodelled managed calls,")
     print("  which carry no type, or values loaded from fields this analysis")
-    print("  never wrote. Typing an allocation only helps where the object")
-    print("  reaches the call site through code the analysis actually executed.")
+    print("  never wrote. Typing an allocation only helps when the object reaches")
+    print("  the call site through code that actually ran.")
     print()
-    print("  This is reported as a negative result. The mechanism is implemented,")
-    print("  it is sound when it fires, and on these two samples it does not fire")
-    print("  often enough to matter. What carries the result is the static")
-    print("  call-site table.  [symbolic]")
+    print("  So: a negative result. The mechanism works when it fires, and on")
+    print("  these two samples it does not fire. The static call-site table is")
+    print("  what carries the result.  [symbolic]")
     print(ledger.legend())
 
 

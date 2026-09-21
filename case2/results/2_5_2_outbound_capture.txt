@@ -1,9 +1,9 @@
 ==========================================================================
 2.5.2 (case 2)  OUTBOUND INTERCEPTION: Thanos's FTP exfiltration report
 ==========================================================================
-  generated   2026-09-17 05:50:11 UTC
-  revision    bb0a30c+dirty
-  source hash 79364e236fd1403c  (aot_bridge.py, callsite_map.py, managed_call_explorer.py, managed_runtime.py, outbound_capture.py)
+  generated   2026-09-21 17:37:44 UTC
+  revision    83a68d8+dirty
+  source hash 901cbd0f4601017e  (aot_bridge.py, callsite_map.py, managed_call_explorer.py, managed_runtime.py, outbound_capture.py)
   environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
               Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
   artifact    case2/samples/extracted/thanos.exe
@@ -43,11 +43,11 @@
   note        each arm runs in a fresh process
 
 default (BFS)
-   steps 6   peak 1   blocks 5   2.4s   stashes {}
+   steps 6   peak 1   blocks 5   1.1s   stashes {}
    outbound calls captured : 0
 
 ManagedCallExplorer
-   steps 61   peak 1   blocks 52   1.9s   stashes {'deadended': 1}
+   steps 61   peak 1   blocks 52   1.2s   stashes {'deadended': 1}
    outbound calls captured : 6
    call sites resolved     : 15 static, 0 by receiver type; 0 unsupported (0 quarantined)
 
@@ -73,11 +73,11 @@ THE FTP REQUEST, AS IT WAS ASSEMBLED
       offset         = 0                                                              [symbolic]
       count          = 31                                                             [symbolic]
 
-  Reading that back: the sample uploads a text file whose name is
+  So the sample uploads a text file named
   `UserName=<user>_MachineName=<machine>_<cpuid+volumeserial>.txt`
   to an FTP server, with the report as the request body.
 
-  The third component is a hardware fingerprint, not a timestamp:
+  The third component is a hardware fingerprint, not a timestamp.
   `MufMaOSvGyvz.MfnxCHhUwIjyzc::HHmRdTUQTZoj` queries WMI for
   win32_processor -> processorID and for
   win32_logicaldisk.deviceid="C:" -> VolumeSerialNumber and
@@ -86,7 +86,7 @@ THE FTP REQUEST, AS IT WAS ASSEMBLED
   [static, from the CIL at rva 0x7890]
 
 --------------------------------------------------------------------------
-THE DESTINATION IS A PLACEHOLDER, AND THAT IS THE FINDING
+DESTINATION LITERALS
 --------------------------------------------------------------------------
   The three arguments the caller passes are `ldstr` constants:
       'URL'
@@ -96,11 +96,11 @@ THE DESTINATION IS A PLACEHOLDER, AND THAT IS THE FINDING
   Spanish for "access" -- and they appear at ten call sites in the
   assembly, always as the same three constants.  [static]
 
-  This build is a Thanos *builder output with the FTP fields left
-  unfilled*: the affiliate never entered a server. No deployed FTP
-  host, user or password is recovered here, and none is claimed.
-  What is recovered is the exfiltration mechanism and the exact shape
-  of what it would send.  [inference from the two above]
+  So this is builder output with the FTP fields left unfilled --
+  the affiliate never entered a server. No deployed FTP host, user
+  or password comes out of this, and I am not claiming one. What
+  does come out is the exfiltration mechanism and the exact shape of
+  what it would send.  [inference from the two above]
 
 --------------------------------------------------------------------------
 THE REPORT BODY
@@ -123,10 +123,10 @@ THE REPORT BODY
       Client Unique Identifier Key: 
       <- the victim key
 
-  The body is supplied here as a labelled fixture, because building
-  it means executing 4,218 bytes of `Main`'s CIL, which this entry
-  point and budget do not cover. Nothing in the captured request body
-  is victim data: it is the fixture, and it is labelled as one.
+  The body is a labelled fixture here. Building it for real means
+  executing 4,218 bytes of `Main`'s CIL, which this entry point and
+  budget do not cover. So nothing in the captured request body is
+  victim data.
 
 --------------------------------------------------------------------------
 CONTRAST: THE CONNECTIVITY PROBE
@@ -152,4 +152,4 @@ EVIDENCE CLASSES USED ABOVE
   [symbolic]    symbolic observation - produced by execution under the models listed
   [inference]   inference - argued from the two above, not directly observed
   [fixture]     supplied fixture - a value this analysis provided, not one it recovered
-  [unresolved]  unresolved - named here so that it is not mistaken for a result
+  [unresolved]  unresolved - the analysis did not recover this value

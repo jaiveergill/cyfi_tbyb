@@ -2,11 +2,11 @@
 """
 2.5.2 (case 2) - intercept what Thanos sends, before it is sent.
 
-Thanos is ransomware, so its outbound traffic is not a C2 channel but a report:
-`MufMaOSvGyvz.MfnxCHhUwIjyzc::qkCGSsikzw(url, username, password, body)` builds
-an FTP filename out of the victim's user and machine names, opens an
+Thanos is ransomware, so its outbound traffic is a report rather than a C2
+channel. `MufMaOSvGyvz.MfnxCHhUwIjyzc::qkCGSsikzw(url, username, password, body)`
+builds an FTP filename out of the victim's user and machine names, opens an
 `FtpWebRequest`, and writes the report into the request stream. That routine is
-the interception point.
+where I intercept.
 
 Nothing here connects to anything. `WebRequest.Create`, `GetRequestStream`,
 `Stream.Write`, `GetResponse` and `WebClient.DownloadString` are all replaced by
@@ -162,11 +162,11 @@ def main():
                 "fixture" if isinstance(v, str) and v.startswith("<") else "symbolic")
             print(f"      {n:<14} = {str(v)[:120]:<62} [{cls}]")
     print()
-    print("  Reading that back: the sample uploads a text file whose name is")
+    print("  So the sample uploads a text file named")
     print("  `UserName=<user>_MachineName=<machine>_<cpuid+volumeserial>.txt`")
     print("  to an FTP server, with the report as the request body.")
     print()
-    print("  The third component is a hardware fingerprint, not a timestamp:")
+    print("  The third component is a hardware fingerprint, not a timestamp.")
     print("  `MufMaOSvGyvz.MfnxCHhUwIjyzc::HHmRdTUQTZoj` queries WMI for")
     print("  win32_processor -> processorID and for")
     print("  win32_logicaldisk.deviceid=\"C:\" -> VolumeSerialNumber and")
@@ -176,7 +176,7 @@ def main():
 
     print()
     print("-" * 74)
-    print("THE DESTINATION IS A PLACEHOLDER, AND THAT IS THE FINDING")
+    print("DESTINATION LITERALS")
     print("-" * 74)
     print("  The three arguments the caller passes are `ldstr` constants:")
     for a in CALLER_ARGS:
@@ -185,11 +185,11 @@ def main():
     print("  Spanish for \"access\" -- and they appear at ten call sites in the")
     print("  assembly, always as the same three constants.  [static]")
     print()
-    print("  This build is a Thanos *builder output with the FTP fields left")
-    print("  unfilled*: the affiliate never entered a server. No deployed FTP")
-    print("  host, user or password is recovered here, and none is claimed.")
-    print("  What is recovered is the exfiltration mechanism and the exact shape")
-    print("  of what it would send.  [inference from the two above]")
+    print("  So this is builder output with the FTP fields left unfilled --")
+    print("  the affiliate never entered a server. No deployed FTP host, user")
+    print("  or password comes out of this, and I am not claiming one. What")
+    print("  does come out is the exfiltration mechanism and the exact shape of")
+    print("  what it would send.  [inference from the two above]")
 
     print()
     print("-" * 74)
@@ -209,10 +209,10 @@ def main():
                  "Client Unique Identifier Key: ", "<- the victim key"]:
         print(f"      {line}")
     print()
-    print("  The body is supplied here as a labelled fixture, because building")
-    print("  it means executing 4,218 bytes of `Main`'s CIL, which this entry")
-    print("  point and budget do not cover. Nothing in the captured request body")
-    print("  is victim data: it is the fixture, and it is labelled as one.")
+    print("  The body is a labelled fixture here. Building it for real means")
+    print("  executing 4,218 bytes of `Main`'s CIL, which this entry point and")
+    print("  budget do not cover. So nothing in the captured request body is")
+    print("  victim data.")
 
     print()
     print("-" * 74)

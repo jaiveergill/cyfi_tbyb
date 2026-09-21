@@ -2,8 +2,8 @@
 """
 2.5 - the controlled comparison for GravityRat.
 
-Three stages, each adding exactly one thing to the one before it, so that an
-improvement can be attributed:
+Three stages, each adding exactly one thing to the one before it, so any
+improvement has a cause:
 
   A  the original PE, angr's default BFS and DFS.
   B  the AOT-translated image, the same default BFS, with the static runtime
@@ -23,13 +23,12 @@ and three ablations, two of C's parts and one of the framing itself:
      4-byte hook per resolved site -- under the *default* BFS manager, with no
      ExplorationTechnique at all.
 
-D is the ablation that asks whether the technique earns its place, rather than
-whether its internals do. If D matches C then the coverage result belongs to the
-call-site table, which is a static analysis, and the technique is its delivery
-mechanism rather than its cause. That is a question worth settling with a
-measurement instead of an argument.
+D asks whether the technique earns its place at all, rather than whether its
+internals do. If D matches C then the coverage comes from the call-site table,
+which is a static analysis, and the technique is only how it gets delivered.
+Better to measure that than argue about it.
 
-What is measured is behaviour, not just block counts: which runtime APIs are
+The measurements are behavioural, not just block counts: which runtime APIs are
 reached, how many indirect calls were resolved and on what evidence, how many
 boundaries remain unsupported, and how many states survive the budget.
 
@@ -250,9 +249,8 @@ def main():
           "'resolved',")
     print("  'unsup', 'quar', 'surv', 'peak' and 'capt' are from the first "
           "repeat.")
-    print("  peak = the largest number of simultaneously active states; it is a")
-    print("  count of states, not a memory measurement, and no memory figure is")
-    print("  claimed anywhere in this project.")
+    print("  peak = the largest number of simultaneously active states. It")
+    print("  counts states, not bytes; nothing here measures memory.")
 
     print()
     print("-" * 74)
@@ -280,10 +278,9 @@ def main():
         print(f"  {label.strip():<38} blocks {b}  "
               f"{'identical across 3 runs' if same else 'VARIES -- see note'}")
     print()
-    print("  Reached-API sets and resolution counts reproduce exactly. Where a")
-    print("  block count varies it is because a run that ends in the frontier cap")
-    print("  ends at a different place; the figures quoted in the write-up are")
-    print("  the ones this table shows.")
+    print("  Reached-API sets and resolution counts reproduce exactly. A block")
+    print("  count varies when a run ends in the frontier cap, because it stops")
+    print("  somewhere slightly different. The write-up quotes this table.")
     print(ledger.legend())
 
 

@@ -2,8 +2,8 @@
 """
 2.3 - Symbolic execution on the AOT-translated image.
 
-Two runs against the same entry point, so that translation and runtime
-modelling can be told apart:
+Two runs against the same entry point, to tell translation and runtime
+modelling apart:
 
   A. plain angr on the .so       -- machine code exists, but mono left the
                                     linkage table empty, so calls leaving a
@@ -14,8 +14,8 @@ modelling can be told apart:
                                     helpers, typed allocation and String.Concat
 
 Each stage adds one thing, and the step count says what it bought. None of the
-three resolves an indirect call site; that is §2.4's subject, and the point of
-stage C is to show how far modelling alone gets before the boundary is reached.
+three resolves an indirect call site -- that is §2.4's subject. Stage C is here
+to show how far modelling alone gets before hitting the boundary.
 
 Symbolic emulation only; the sample is never executed.
 
@@ -119,10 +119,10 @@ def main():
     print(f"  stashes   {({k: len(v) for k, v in simgr.stashes.items() if v})}"
           f"   errored {len(getattr(simgr, 'errored', []))}")
     print()
-    print("  Modelling alone gets the state into the method and no further: the")
+    print("  Modelling alone gets the state into the method and no further. The")
     print("  first `callvirt` is an indirect branch through a vtable that does")
-    print("  not exist, and no amount of modelling the *callee* helps, because")
-    print("  the problem is not knowing which callee it is.  [symbolic]")
+    print("  not exist, and modelling the callee cannot help when the problem is")
+    print("  not knowing which callee it is.  [symbolic]")
 
 
 if __name__ == "__main__":

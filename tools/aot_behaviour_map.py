@@ -5,8 +5,8 @@ Map each AOT-translated method to the runtime APIs it calls.
 mono's AOT output routes every call through a named PLT entry, so a static
 sweep of each method body for direct branches into the PLT recovers a call
 graph from translated managed code to the base class library. Calls that leave
-the assembly appear as unresolved PLT entries and are exactly the behaviours
-worth choosing as symbolic execution goals.
+the assembly show up as unresolved PLT entries, which is where the behaviours
+worth aiming symbolic execution at live.
 
     .venv/bin/python tools/aot_behaviour_map.py <image.so> [--category REGEX]
 """

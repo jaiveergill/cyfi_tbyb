@@ -2,8 +2,8 @@
 
 Two case studies — **Win32.GravityRat** and **Ransomware.Thanos**, both from
 [theZoo](https://github.com/ytisf/theZoo) — on getting a .NET binary into angr
-at all, and then on the kind of `ExplorationTechnique` the residual failure
-actually calls for.
+at all, and then on what kind of `ExplorationTechnique` the failure that is left
+over actually needs.
 
 The write-up is **`CyFI_dotNET_angr_writeup_final.docx`**. Every figure in it is
 pulled out of `case*/results/` when the document is built, so it cannot quote a
@@ -115,10 +115,10 @@ Then:
 ### A note on measurement
 
 Run each comparison arm in its own process. angr and CLE keep process-global
-state across `Project` construction, and running two arms in one interpreter
-produces bimodal results. Every comparison script here forks a subprocess per
-arm for that reason, and reports three repeats so the figures can be seen to be
-stable. In the current tree all three repeats of every arm agree exactly.
+state across `Project` construction, and two arms in one interpreter gives
+bimodal results. So every comparison script forks a subprocess per arm, and
+reports three repeats so you can see whether the figures are stable. In the
+current tree all three repeats of every arm agree exactly.
 
 ## Layout
 
@@ -138,31 +138,30 @@ stable. In the current tree all three repeats of every arm agree exactly.
 | `LOGBOOK.md` | command log (part 1) and decision history (part 2), including the rejections and the corrections made after the fact |
 | `EVIDENCE.md` | every result file with its sha256, the command that makes it, and the section that rests on it |
 
-## What is and is not established
+## What this does and does not cover
 
 The write-up's §6 is a requirements matrix with four rows that are not fully
-met, listed rather than omitted. The three worth knowing before reading:
+met, listed rather than omitted. Three worth knowing before you read it:
 
-- **VirusTotal was never consulted.** This analysis ran without outbound network
-  access, so neither the upload nor the hash search the brief offers was
-  performed, and no report is reproduced. It is one hash search per sample and
-  the hashes are in the table above. The .NET classification in the write-up is
-  independent of it — CLI header, single `_CorExeMain` import, metadata tables —
-  but the *family* attribution for GravityRat is not corroborated anywhere
-  outside theZoo's own labelling.
+- **VirusTotal was never consulted.** I ran this without outbound network
+  access, so I did neither the upload nor the hash search the brief offers, and
+  no report is reproduced here. It is one hash search per sample and the hashes
+  are in the table above. The .NET classification does not depend on it — CLI
+  header, single `_CorExeMain` import, metadata tables — but the *family*
+  attribution for GravityRat rests on theZoo's labelling and nothing else.
 - **The document was not rendered to page images.** This environment has no
   LibreOffice, pandoc or pdftoppm. `tools/inspect_docx.py` checks it
   structurally instead — heading tree, table shapes, overlong unbreakable
   tokens, placeholder text, cross-references — and the substitution is disclosed
   in the document.
-- **No clean-machine reproduction was performed.** `./run_all.sh` was run end to
-  end in this workspace, and separately from a fresh `git clone` with only the
-  samples copied in — so the committed tree is self-contained and the results
-  reproduce byte for byte from it. But the Python environment was shared rather
-  than rebuilt, and no second machine was used.
+- **No clean-machine reproduction was performed.** `./run_all.sh` ran end to
+  end in this workspace, and again from a fresh `git clone` with only the samples
+  copied in, so the committed tree is self-contained and reproduces byte for
+  byte. But I shared the Python environment rather than rebuilding it, and never
+  tried a second machine.
 
 Host facts (MAC address, CPU id, machine name) are **labelled fixtures**, never
-recovered data, and every capture in the results says which of its values are
-which. Thanos's FTP destination is the literal builder placeholder
-`"URL"`/`"USERNAME"`/`"ACCESO"`; no deployed server is recovered and none is
-claimed.
+recovered data, and every capture in the results marks which values are which.
+Thanos's FTP destination is the literal builder placeholder
+`"URL"`/`"USERNAME"`/`"ACCESO"`. No deployed server comes out of this and I do
+not claim one.

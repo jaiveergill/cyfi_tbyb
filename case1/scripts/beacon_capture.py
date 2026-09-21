@@ -4,9 +4,8 @@
 
 `LSASS.Core.Jobs.SystemSettings` builds a `NameValueCollection` of host facts and
 hands it to `Agent.SendBasicInformation`, which posts it with
-`WebClient.UploadValues`. The goal of this script is the one the brief sets for
-network interception: recover what would go out, from inside the process, without
-any of it going out.
+`WebClient.UploadValues`. This script recovers what would go out, from inside the
+process, without any of it going out.
 
 Nothing here opens a socket. `WebClient.UploadValues` is replaced by a model that
 reads its three arguments out of the state, writes them to a Python list and
@@ -17,9 +16,9 @@ Two arms, identical in every respect except the exploration strategy:
   default   angr's default breadth-first manager
   custom    the same, plus ManagedCallExplorer
 
-Each arm runs in its own process, because angr and CLE keep process-global state
-across `Project` construction and running both in one interpreter does not give
-a clean comparison.
+Each arm runs in its own process. angr and CLE keep process-global state across
+`Project` construction, so running both in one interpreter gives a dirty
+comparison.
 
     .venv/bin/python case1/scripts/beacon_capture.py [default|custom]
 """
@@ -196,7 +195,7 @@ def main():
     print("-" * 74)
     print("  The URL is built as `Domain + \"/GX/GX-Server.php\"`. `Domain` is a")
     print("  static field this entry point never assigns, so the host half is")
-    print("  unresolved on the captured path and the model names it as such.")
+    print("  unresolved on the captured path.")
     print()
     print(f"  host list, recovered by executing DomainController..cctor "
           f"({len([h for h in hosts if h])} of {len(hosts)} Add calls resolved):")

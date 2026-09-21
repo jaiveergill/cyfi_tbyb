@@ -169,7 +169,7 @@ heap. A loader stub has no literals of its own.
 | `Win32.AgentTesla` | — | VB.NET crypter stub over a 224 KB encrypted blob; the anti-analysis, network and dispatch code is in a stage two not on disk in readable form |
 | `Backdoor.MSIL.Tyupkin` | 2,308 B | C++/CLI mixed-mode, real native code, no `System.Net` |
 | **`Win32.GravityRat`** | **20,544 B** | **selected** |
-| **`Ransomware.Thanos`** | 528 literals | **selected** — different family, author, obfuscation posture and purpose, which is what makes it a test of the method rather than of one binary |
+| **`Ransomware.Thanos`** | 528 literals | **selected** — different family, author, obfuscation posture and purpose, so it tests the method rather than one binary |
 
 **Cost accepted.** Neither has source in theZoo, and the brief prefers samples
 that do. Findings are verified against the CIL instead. AgentTesla *did* have
@@ -280,7 +280,7 @@ than guessed.
 
 `tools/callsite_map.py:259` `align()`.
 
-**Two checks, neither of which is the method that produced the result.**
+**Two checks, neither of which is the method itself.**
 
 | | GravityRat | Thanos |
 |---|---|---|
@@ -354,9 +354,9 @@ corroborated by appearing at the same slot (0x480478) in two methods.
 | `String.Concat`, per arity and for arrays | Left unmodelled it is the single most damaging stub: it builds the C2 URL and the exfil report body. |
 | return kind from the metadata signature | A stub must return an object where the caller will dereference and a symbol where the caller will branch. Getting it backwards loses the state either way, so it is read from the signature blob rather than guessed from the method name. |
 
-**Declared and *not* silently applied:** host facts (MAC, CPU id, machine name)
-are labelled fixtures naming the method they stood in for, so anything capturing
-one carries its provenance and cannot be read as recovered victim data.
+**Declared, not silently applied.** Host facts (MAC, CPU id, machine name) are
+labelled fixtures naming the method they stood in for, so anything that captures
+one carries where it came from and cannot be read as recovered victim data.
 
 ## 2.9  The technique, and the hook it had to use  `[rebuild]`
 
@@ -411,7 +411,7 @@ instruction after the call, jump to the model — the same call semantics
 | C2 — ablation: no quarantine | 294, 12 | 1,012, 38 |
 | **D — same table as plain hooks, no technique** | **307, 12** | **1,026, 38** |
 
-**Verdict, and it is not the one the earlier draft claimed.** On both samples the
+**Verdict.** Not the one the earlier draft claimed. On both samples the
 plain-hook arm **matches the technique on every behavioural measure and covers
 slightly more blocks** — 307 against 291, and 1,026 against 1,009. Same APIs,
 same captures: D intercepts the GravityRat beacon at `WebClient.UploadValues`
@@ -423,8 +423,7 @@ advantage** over applying that table with ordinary hooks, and on these two
 samples it is marginally behind. What it still does that a hook cannot is
 quarantine: filing a state that reaches an unjustifiable call site into its own
 stash with a diagnostic naming why, instead of letting angr lose it. That is a
-diagnostic contribution, not a coverage one, and it is the only one the
-measurements support.
+diagnostic, not coverage, and it is the only thing the measurements back.
 
 **C1 is a flat negative.** Receiver-directed resolution — (recorded object type,
 slot) → callee at run time — fires **zero** times on both samples. The receivers
@@ -439,7 +438,7 @@ quarantine stash. The coverage came from the table. An earlier draft of the
 write-up claimed the technique was worth a fifth more coverage than plain hooks;
 that claim came from the broken arm D and does not survive its correction.
 
-## 2.11  Per-case findings, and how each was established
+## 2.11  Per-case findings, and where each came from
 
 ### Case 1 — Win32.GravityRat
 
@@ -455,9 +454,9 @@ that claim came from the broken arm D and does not survive its correction.
 | `isVM` is 7-way OR with **one** caller, which writes the result into the beacon's VMNOTES field | static |
 | forcing all 7 probes changes one string and **nothing reachable** | symbolic, three arms |
 
-**The prediction that was wrong.** Static triage predicted a VM check gating the
-payload. It checks, and it does not gate. Only the forced comparison
-distinguishes "checks for a VM" from "evades a VM".
+**The prediction that was wrong.** Static triage said there would be a VM check
+gating the payload. It checks, and it does not gate. Only the forced comparison
+tells "checks for a VM" apart from "evades a VM".
 
 ### Case 2 — Ransomware.Thanos
 
@@ -471,13 +470,13 @@ distinguishes "checks for a VM" from "evades a VM".
 | forcing the anti-analysis checks changes **nothing reachable** | symbolic, two arms |
 | no inbound command surface: the assembly's only two `switch` instructions are one OS-version-name helper keyed on `OperatingSystem.Version.Major` | static |
 
-**§2.5.3 is inapplicable here and is recorded that way**, not quietly dropped.
-The structural analogue — the builder configuration — is mapped exhaustively
-instead.
+**§2.5.3 does not apply here**, and is recorded as inapplicable rather than
+quietly dropped. The nearest structural equivalent — the builder configuration —
+is mapped exhaustively instead.
 
 ## 2.12  Corrections made after the fact
 
-Recorded because a logbook that only contains successes is not a logbook.
+Things I got wrong and fixed later.
 
 | what was wrong | how it surfaced | fix |
 |---|---|---|

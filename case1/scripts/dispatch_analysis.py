@@ -8,13 +8,13 @@ is the only method in the assembly that switches on a `TaskName` (the other
 `get_TaskName` use, in `UpdateServer` itself, formats a progress string), so it is
 where the command-to-behaviour mapping lives.
 
-Three obstacles, each handled explicitly:
+Three obstacles:
 
   the dispatch runs on a thread pool, which symbolic execution does not follow.
   The lambda is a named method, so it is entered directly, with the closure and
-  task objects it would have received built by hand. Everything this script
-  reports is therefore bounded to that routine - it is not a claim about what is
-  reachable from the program's entry point.
+  task objects it would have received built by hand. So everything here is
+  bounded to that routine. I am not claiming anything about what is reachable
+  from the program's entry point.
 
   mono leaves the switch's jump table null in the image, exactly as it leaves the
   linkage table null, so the `br x0` reads zero and every arm is lost. The arms
@@ -24,8 +24,8 @@ Three obstacles, each handled explicitly:
 
   `TaskName` is an auto-property, and mono inlined its getter: the compiled code
   reads the field directly (`ldrsw x25, [x0, #0x20]`) and never calls
-  `get_TaskName`. Hooking the getter would therefore symbolize nothing. The field
-  itself is symbolized instead.
+  `get_TaskName`. Hooking the getter would symbolize nothing, so the field itself
+  is symbolized instead.
 
     .venv/bin/python case1/scripts/dispatch_analysis.py [default|custom]
 """
@@ -352,7 +352,7 @@ def main():
     print()
     print("  Each native arm's first outgoing call is compared with the callee")
     print("  the CIL invokes first at the IL offset the switch pairs it with.")
-    print("  A pairing that merely `contains a call` is not a check; this is.")
+    print("  Checking only that an arm contains some call would pass anything.")
     print()
     print(f"      {'IL':<8} {'arm':<11} {'native first managed call':<46} "
           f"{'CIL callee window at that offset':<54} match")
@@ -407,9 +407,9 @@ def main():
     print()
     print("  Both arms reach every handler. Once the jump table is reconstructed")
     print("  the switch is an ordinary 13-way branch on a symbolic value, which")
-    print("  angr's default manager forks correctly on its own. This part of the")
-    print("  result belongs to the runtime modelling, not to the technique, and")
-    print("  is reported that way.  [symbolic]")
+    print("  angr's default manager forks correctly on its own. So this part of")
+    print("  the result comes from the runtime modelling, not the technique.")
+    print("  [symbolic]")
 
     print()
     print("-" * 74)
@@ -424,13 +424,12 @@ def main():
     print("  handled here: they fall to `OnCompleted(_task, respFile)` and produce")
     print("  no action.  [static, from the switch instruction]")
     print()
-    print("  Scope of that statement: `get_TaskName` has two consumers in the")
+    print("  How far that goes: `get_TaskName` has two consumers in the")
     print("  assembly. This lambda is one; the other is `UpdateServer` itself,")
     print("  which uses it to build a progress string (IL 0x011C -> String.Concat")
-    print("  -> OnProgress), not to dispatch. There is no second dispatcher on")
-    print("  TaskName. The claim is bounded to the TaskName enum and to this")
-    print("  routine; it is not a claim that the build has no other command")
-    print("  surface.  [static]")
+    print("  -> OnProgress), not to dispatch. So there is no second dispatcher on")
+    print("  TaskName. That covers the TaskName enum and this routine only. The")
+    print("  build may well have another command surface elsewhere.  [static]")
     print(ledger.legend())
 
 

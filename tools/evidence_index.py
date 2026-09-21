@@ -16,7 +16,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 import ledger   # noqa: E402
 
-# result file -> (section, what it establishes, the command that makes it)
+# result file -> (section, what it shows, the command that makes it)
 INDEX = [
     ("case1/results/2_1_static_triage.txt", "1 / 2.1",
      "identity, hashes, sections, imports, TypeDefs, assembly references",
@@ -113,12 +113,12 @@ def main():
     out = ["# Evidence index", "",
            "Every number and behavioural claim in "
            "`CyFI_dotNET_angr_writeup_final.docx` comes from one of the files "
-           "below. Each opens with a header recording the artifact hashes and "
-           "the tool versions, and the symbolic experiments additionally record "
-           "the entry point, the symbolic inputs, the models installed and the "
-           "step budget, so a figure can be checked against the conditions that "
-           "produced it. The two raw CIL dumps and de4dot's own output are the "
-           "exceptions: they are verbatim tool output with no header of ours.",
+           "below. Each opens with a header giving the artifact hashes and the "
+           "tool versions; the symbolic experiments also record the entry "
+           "point, the symbolic inputs, the models installed and the step "
+           "budget, so any figure can be checked against the conditions that "
+           "produced it. The two raw CIL dumps and de4dot's own output have no "
+           "header of ours -- they are verbatim tool output.",
            "",
            "Regenerate all of them with `./run_all.sh`, or one group with "
            "`./run_all.sh 2.5.2`.", "",
@@ -126,7 +126,7 @@ def main():
     for k, v in ledger.CLASSES.items():
         out.append(f"- **{k}** — {v}")
     out += ["", "## Result files", "",
-            "| file | § | establishes | produced by | sha256 |",
+            "| file | § | shows | produced by | sha256 |",
             "|---|---|---|---|---|"]
     missing = []
     for path, sec, what, cmd in INDEX:
@@ -150,13 +150,13 @@ def main():
         out.append(f"| `{path}` | `{ledger.sha256(p) if p.exists() else 'MISSING'}` |")
     out += ["", "## Narrative", "",
             "| file | contents |", "|---|---|",
-            "| `LOGBOOK.md` | the command log and the decision history: every "
-            "design decision with the measurement that drove it, the four "
-            "rejected designs, and the corrections made after the fact |",
+            "| `LOGBOOK.md` | the command log and the decision history: each "
+            "design decision with the measurement behind it, the four rejected "
+            "designs, and the corrections made after the fact |",
             "", "## Superseded work", "",
             "`archive/superseded/` keeps the two rejected exploration techniques "
             "and the earlier write-up drafts, with a note on why each was "
-            "replaced. Nothing there contributes a number to the results.", ""]
+            "replaced. No number in the results comes from there.", ""]
     (ROOT / "EVIDENCE.md").write_text("\n".join(out) + "\n")
     print(f"wrote EVIDENCE.md  ({len(INDEX)} result files, "
           f"{len(missing)} missing)")

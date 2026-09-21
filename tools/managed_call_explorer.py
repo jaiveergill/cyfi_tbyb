@@ -110,11 +110,8 @@ class ManagedCallExplorer(angr.ExplorationTechnique):
                     print(f"    [{how}] {addr:#x} -> {callee}")
                 return simgr.successors(
                     nxt, **{k: v for k, v in kwargs.items() if k != "num_inst"})
-            # Nothing justifies a target. Executing the branch anyway reads an
-            # unfilled vtable slot and jumps to whatever that gives -- zero under
-            # the zero-fill model -- so the state is lost and, worse, lost
-            # silently. It is captured here instead, at the boundary, with its
-            # path constraints and its history intact, and the reason recorded.
+            # No target could be justified, so hold the state at the call site
+            # with its constraints and history intact, and record why.
             why = self._why(state, addr)
             self.unsupported += 1
             if self.quarantine:

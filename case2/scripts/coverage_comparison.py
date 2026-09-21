@@ -2,8 +2,8 @@
 """
 2.5 (case 2) - the controlled comparison for Thanos.
 
-Same three stages as case 1, on a different sample, so that the result is not a
-property of one binary:
+Same three stages as case 1, on a different sample, to check the result is not
+just a property of one binary:
 
   A  the original PE, angr's default BFS and DFS.
   B  the AOT image with the static runtime models, default BFS.
@@ -12,11 +12,11 @@ property of one binary:
   C2 ablation: quarantine off.
   D  ablation: the same call-site table delivered as plain 4-byte
      `project.hook` calls under the default BFS manager, with no
-     ExplorationTechnique -- the arm that asks whether the technique itself, as
-     opposed to the table it carries, is what produces the result.
+     ExplorationTechnique. This is the arm that asks whether the technique or
+     the table it carries is what produces the result.
 
-Every translated method that has a body is used as an entry point, so the
-measurement covers the whole image rather than a chosen subset.
+Every translated method with a body is used as an entry point, so this covers
+the whole image rather than a subset I picked.
 
     .venv/bin/python case2/scripts/coverage_comparison.py [B|C|C1|C2|D|A]
 """

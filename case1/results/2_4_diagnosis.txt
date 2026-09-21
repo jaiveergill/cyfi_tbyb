@@ -1,9 +1,9 @@
 ==========================================================================
 2.4  DIAGNOSING WHERE SYMBOLIC EXECUTION BREAKS ON THE TRANSLATED IMAGE
 ==========================================================================
-  generated   2026-09-17 05:57:53 UTC
-  revision    bb0a30c+dirty
-  source hash 28ea72b8db3ef21a  (aot_bridge.py, callsite_map.py, diagnose.py, managed_call_explorer.py, managed_runtime.py)
+  generated   2026-09-21 17:30:48 UTC
+  revision    83a68d8+dirty
+  source hash d2e51d5a33fdf5c8  (aot_bridge.py, callsite_map.py, diagnose.py, managed_call_explorer.py, managed_runtime.py)
   environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
               Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
   artifact    case1/samples/extracted/Win32.GravityRAT.exe
@@ -45,7 +45,7 @@
 2. IS THE LOSS RECOVERABLE BY CHOOSING A TARGET?
 --------------------------------------------------------------------------
   Measured two ways, because the answer depends on how uninitialised
-  memory is modelled, and both ways lead to the same conclusion.
+  memory is modelled. Both ways agree.
 
   angr's default (an unmapped read yields a fresh symbol)
       lost states examined across 6 entry points : 24
@@ -58,19 +58,19 @@
         program counter fixed or narrowed                        : 7
 
   Under angr's default the branch register is a fresh symbol nothing
-  constrains, so the solver will accept any address at all: choosing
-  one *invents* a path, and behaviour reported from it could be
-  behaviour the sample never performs. Under the zero-fill model the
-  branch register is concretely zero, which is not a target either.
-  In neither case does the state contain the answer.  [symbolic]
+  constrains, so the solver accepts any address at all. Picking one
+  invents a path, and the sample may never perform what gets reported
+  from it. Under the zero-fill model the register is concretely zero,
+  which is no better. Either way the state does not hold the answer.
+  [symbolic]
 
   This is what rejected the first design, which recovered states from
   `unconstrained` by pinning the program counter to plausible in-image
   methods (kept in archive/superseded/tools/managed_explorer.py).
 
-  The corollary is the one the final design rests on: the missing
-  information is not in the state, so it has to come from outside it
-  -- from the original assembly's metadata.
+  Which is what the final design rests on: the missing information
+  is not in the state, so it has to come from outside -- from the
+  original assembly's metadata.
 
 --------------------------------------------------------------------------
 3. IS THERE A PATH-EXPLOSION PROBLEM?
@@ -89,10 +89,9 @@
   is what rejected the second design (LossAvoidingExplorer, kept in
   archive/superseded/case1_scripts/).  [symbolic]
 
-  The caveat matters and is kept in the write-up: explosion cannot be
-  observed in code that is never reached. These numbers are taken with
-  the boundary repaired, which is the only condition under which they
-  mean anything, but the budget is still 60 steps per entry point.
+  One caveat, kept in the write-up: you cannot see explosion in code
+  that is never reached. These numbers are taken with the boundary
+  repaired, but the budget is still 60 steps per entry point.
 
 --------------------------------------------------------------------------
 4. WHAT REMAINS UNSUPPORTED, AND WHY
@@ -100,12 +99,11 @@
   states captured at an unsupported boundary: 7
          7  receiver is null
 
-  Distinguishing these matters because they call for different
-  repairs: a symbolic receiver is the downstream consequence of an
+  These need different repairs. A symbolic receiver comes from an
   earlier unmodelled call, an untyped receiver is an allocator or
   metadata gap, and an unrecognised dispatch shape is a decoding gap.
-  Lumping them together as 'unconstrained' is what makes the failure
-  look like one problem when it is several.  [symbolic]
+  Lumped together as 'unconstrained' they look like one problem when
+  they are three.  [symbolic]
 
 --------------------------------------------------------------------------
 5. WHY RECEIVER-DIRECTED RESOLUTION FIRES AS RARELY AS IT DOES
@@ -116,16 +114,15 @@
   allocation sites carrying a type           : 257
 
   On the paths measured above the receiver-directed lookup resolved
-  nothing, and the diagnostics say why: the receivers arriving at
-  unresolved sites are objects returned by *unmodelled managed calls*,
+  nothing. The diagnostics say why: the receivers arriving at
+  unresolved sites are objects returned by unmodelled managed calls,
   which carry no type, or values loaded from fields this analysis
-  never wrote. Typing an allocation only helps where the object
-  reaches the call site through code the analysis actually executed.
+  never wrote. Typing an allocation only helps when the object reaches
+  the call site through code that actually ran.
 
-  This is reported as a negative result. The mechanism is implemented,
-  it is sound when it fires, and on these two samples it does not fire
-  often enough to matter. What carries the result is the static
-  call-site table.  [symbolic]
+  So: a negative result. The mechanism works when it fires, and on
+  these two samples it does not fire. The static call-site table is
+  what carries the result.  [symbolic]
 
 --------------------------------------------------------------------------
 EVIDENCE CLASSES USED ABOVE
@@ -134,4 +131,4 @@ EVIDENCE CLASSES USED ABOVE
   [symbolic]    symbolic observation - produced by execution under the models listed
   [inference]   inference - argued from the two above, not directly observed
   [fixture]     supplied fixture - a value this analysis provided, not one it recovered
-  [unresolved]  unresolved - named here so that it is not mistaken for a result
+  [unresolved]  unresolved - the analysis did not recover this value
