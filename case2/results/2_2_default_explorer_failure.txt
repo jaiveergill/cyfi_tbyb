@@ -1,0 +1,91 @@
+==========================================================================
+2.2  THE DEFAULT EXPLORER ON THE ORIGINAL PE
+==========================================================================
+  generated   2026-09-21 17:33:28 UTC
+  revision    83a68d8+dirty
+  source hash f16cd658bcae7c7e  (default_explorer_failure.py)
+  environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
+              Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
+  artifact    case2/samples/extracted/thanos.exe
+              84,480 bytes  sha256 58bfb9fa8889550d13f42473956dc2a7ec4f3abb18fd3faeaa38089d513c171f
+  entry point the PE entry point
+  budget      50 steps
+
+
+========================================================================
+TARGET
+========================================================================
+  case2/samples/extracted/thanos.exe
+  default load: OK
+  arch <Arch X86 (LE)>  entry 0x415eae  opts {'auto_load_libs': False}
+
+  entry block, 1 instruction(s):
+    0x415eae  jmp dword ptr [0x402000]
+
+========================================================================
+1. DEFAULT (BFS) AND DFS
+========================================================================
+
+[default BFS]
+  stashes: {'deadended': 1}
+  deadended: 2 basic blocks   jumpkind Ijk_Ret
+    trace ['0x415eae', '0x500000']
+    0x415eae  offset 0x15eae in thanos.exe (0x415eae)
+    0x500000  _CorExeMain+0x0 in extern-address space (0x0)  hooked by <SimProcedure _CorExeMain (stub)>
+
+[DFS]
+  stashes: {'deadended': 1}
+  deadended: 2 basic blocks   jumpkind Ijk_Ret
+    trace ['0x415eae', '0x500000']
+    0x415eae  offset 0x15eae in thanos.exe (0x415eae)
+    0x500000  _CorExeMain+0x0 in extern-address space (0x0)  hooked by <SimProcedure _CorExeMain (stub)>
+
+  identical -> not a search-strategy failure
+
+========================================================================
+2. CFG COVERAGE
+========================================================================
+  angr.analyses.cfg.cfg_fast: You're trying to analyze a .NET binary as native code. Are you sure?
+  functions 2  nodes 2  edges 1  executable bytes 81,588
+    0x415eae  _start
+    0x500000  _CorExeMain
+
+========================================================================
+3. LOADER OUTPUT, auto_load_libs=True
+========================================================================
+  angr.project: Loading binary case2/samples/extracted/thanos.exe
+  cle.loader: Loading mscoree.dll...
+  cle.loader: ... not found
+  cle.loader: Linking /home/jg/cyfi-project/case2/samples/extracted/thanos.exe
+  cle.backends.externs: Created extern symbol for _CorExeMain
+  cle.loader: Mapping /home/jg/cyfi-project/case2/samples/extracted/thanos.exe at 0x400000
+  cle.loader: Mapping cle##externs at 0x500000
+  cle.loader: Linking cle##externs
+  cle.loader: Mapping cle##externs at 0x600000
+  cle.backends.externs: Created extern symbol for __fastfail
+  angr.project: Using builtin SimProcedure for unresolved _CorExeMain from mscoree.dll
+  cle.backends.externs: Created extern symbol for KiUserExceptionDispatcher
+  cle.backends.externs: Created extern symbol for _fmode
+  cle.backends.externs: Created extern symbol for _commode
+  cle.backends.externs: Created extern symbol for _acmdln
+  cle.backends.externs: Created extern symbol for _wcmdln
+  cle.loader: Linking cle##tls
+  cle.loader: Mapping cle##tls at 0x700000
+
+========================================================================
+4. IS .text ACTUALLY x86?
+========================================================================
+  bytes at first method body rva 0x2730:
+    1b 30 07 00 7a 10 00 00 01 00 00 11 00 7e 1a 00 00 04 28 56 00 00 06 de 03 26 de 00 00 7e 48 00
+
+  as x86:
+    0x00402730  sbb     esi, dword ptr [eax]
+    0x00402732  pop     es
+    0x00402733  add     byte ptr [edx + 0x10], bh
+    0x00402736  add     byte ptr [eax], al
+    0x00402738  add     dword ptr [eax], eax
+    0x0040273a  add     byte ptr [ecx], dl
+    0x0040273c  add     byte ptr [esi + 0x1a], bh
+    0x0040273f  add     byte ptr [eax], al
+
+  as a CIL method header: FAT  maxstack 7  code size 4218 bytes  (header is 12 bytes)

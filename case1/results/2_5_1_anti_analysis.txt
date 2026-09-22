@@ -1,0 +1,108 @@
+==========================================================================
+2.5.1  ANTI-ANALYSIS: GravityRat's virtualisation check, and what forcing it changes
+==========================================================================
+  generated   2026-09-21 17:32:45 UTC
+  revision    83a68d8+dirty
+  source hash 2bcb8fcbac1fa55b  (anti_analysis.py, aot_bridge.py, callsite_map.py, managed_call_explorer.py, managed_runtime.py)
+  environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
+              Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
+  artifact    case1/samples/extracted/Win32.GravityRAT.exe
+              660,480 bytes  sha256 1c0ea462f0bbd7acfdf4c6daf3cb8ce09e1375b766fbd3ff89f40c0aa3f4fc96
+  artifact    case1/samples/extracted/Win32.GravityRAT.exe.so
+              1,134,552 bytes  sha256 776deb59fbd370cc988f57cb51a12337c59e826d1e185ce6b20b49de8e9e50a4
+  entry point LSASS_Core_Jobs_SystemSettings  (the only caller of isVM)
+  technique   ManagedCallExplorer in all three arms
+  models installed
+                mono AOT linkage table resolved (every plt_FOO -> FOO)
+                257 allocation sites typed from their `newobj`
+                178 `ldstr` literals written into their GOT slots
+                per-object header so unbox/null checks read concrete, selecting no callee
+                mono throw helpers modelled as not returning
+                String.Concat modelled at each arity the image uses
+                uninitialised memory reads as zero (CLR zero-initialises managed memory)
+                33 host-fact getters replaced by labelled fixtures (LSASS.Models.Identification.*)
+                model: System.Collections.Specialized.NameValueCollection::Add
+                model: System.Collections.Specialized.NameValueCollection::.ctor
+                model: System.Net.WebClient::UploadValues
+  budget      400 steps per arm
+  note        three arms differ only in what the seven probes return
+
+--------------------------------------------------------------------------
+1. THE CHECK, STATICALLY
+--------------------------------------------------------------------------
+  LSASS.Models.Enviornment::isVM, rva 0x2a34, is a short-circuit OR:
+      DetectVM -> DetectVM2 -> DetectVM3 -> GetProcessorID
+               -> CoreCount -> CpuTemp -> MatchMacAdd
+  any one true and the method returns true.   [static]
+
+      DetectVM         registry: SOFTWARE\Microsoft\Virtual Machine\Guest\Parameters -> HostName, VirtualMachineName
+      DetectVM2        WMI: select * from Win32_BIOS -> version, SerialNumber; matches VMware / Virtual / XEN / Xen / 'A M I'
+      DetectVM3        WMI: Win32_ComputerSystem -> Manufacturer, Model
+      GetProcessorID   WMI: Win32_Processor -> ProcessorId
+      CoreCount        processor count below a threshold
+      CpuTemp          WMI thermal zone temperature (absent on most hypervisors)
+      MatchMacAdd      NIC MAC prefix against known hypervisor OUIs
+
+  Call sites of isVM in the assembly: 1   [static]
+      LSASS.Core.Jobs::SystemSettings, IL 0x0045. The CIL that follows
+      is not a branch around a payload -- it is string construction:
+
+        0045  call  isVM
+        004C  ldstr "Application running in VB/VM, host : "
+        0053  call  VirtualMachine::get_Host
+        0058  ldstr " and machine name : "
+        005F  call  VirtualMachine::get_MachineName
+        0064  call  System.String::Concat
+        006C  ldstr "No VB/VM detected"
+
+      and the result becomes the beacon's VMNOTES field. There is no
+      exit, no sleep and no branch that skips the payload.  [static]
+
+  `LSASS.Models.VirtualMachine` is a data model carrying Host and
+  MachineName for that message -- it is not the check.  [static]
+
+--------------------------------------------------------------------------
+2. FORCING THE PROBES
+--------------------------------------------------------------------------
+  probes forced (each arm): 7 symbols, 7 methods and their PLT entries
+
+  arm                        VMNOTES field as sent                                blocks  Adds  captures
+  left to the model          Application running in VB/VM, host : <System.Objec      243    16         1
+  forced: not a VM           None                                                    243    16         1
+  forced: is a VM            Application running in VB/VM, host : <unresolved>       229    16         1
+
+--------------------------------------------------------------------------
+3. WHAT BECAME REACHABLE
+--------------------------------------------------------------------------
+  clean    blocks 243 vs 243 (+0)   runtime callees reached only in this arm: (none)
+           callees reached only without forcing: System.Object::ToString
+  vm       blocks 229 vs 243 (-14)   runtime callees reached only in this arm: (none)
+           callees reached only without forcing: System.Object::ToString
+
+  Forcing the check changes one string in the beacon and nothing else.
+  No basic block, no runtime call and no outbound call becomes
+  reachable that was not reachable before.  [symbolic]
+
+  The sample fingerprints the environment and reports it to the
+  operator. It does not use the answer to evade, so hooking these
+  probes to unlock hidden behaviour unlocks nothing here.
+  [inference from the two above]
+
+--------------------------------------------------------------------------
+WHY THE UNFORCED ARM ALREADY SEES BOTH SIDES
+--------------------------------------------------------------------------
+  Each probe ends in WMI, registry or NIC calls this analysis models
+  rather than performs, and those models return unconstrained values.
+  So every `brtrue` in the OR chain forks and both outcomes get
+  explored without forcing anything. Forcing is still worth doing --
+  it makes the two outcomes separately attributable -- but it is not
+  what makes them reachable.  [symbolic]
+
+--------------------------------------------------------------------------
+EVIDENCE CLASSES USED ABOVE
+--------------------------------------------------------------------------
+  [static]      static observation - read out of the PE, the metadata or the AOT image
+  [symbolic]    symbolic observation - produced by execution under the models listed
+  [inference]   inference - argued from the two above, not directly observed
+  [fixture]     supplied fixture - a value this analysis provided, not one it recovered
+  [unresolved]  unresolved - the analysis did not recover this value

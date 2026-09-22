@@ -1,0 +1,54 @@
+==========================================================================
+2.2  THE DEFAULT EXPLORER ON THE ORIGINAL PE
+==========================================================================
+  generated   2026-09-21 17:29:48 UTC
+  revision    83a68d8+dirty
+  source hash 86bae69380086e0a  (default_explorer.py)
+  environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
+              Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
+  artifact    case1/samples/extracted/Win32.GravityRAT.exe
+              660,480 bytes  sha256 1c0ea462f0bbd7acfdf4c6daf3cb8ce09e1375b766fbd3ff89f40c0aa3f4fc96
+  entry point the PE entry point
+  budget      50 steps
+
+
+====================================================================
+TARGET
+====================================================================
+  /home/jg/cyfi-project/case1/samples/extracted/Win32.GravityRAT.exe
+  arch <Arch X86 (LE)>   entry 0x4a1dc6
+
+  entry block is 1 instruction(s):
+    0x4a1dc6  jmp dword ptr [0x402000]
+
+====================================================================
+1. DEFAULT (BFS) vs DFS
+====================================================================
+
+[default BFS]
+  stashes: {'deadended': 1}
+  deadended: 2 basic blocks, jumpkind Ijk_Ret
+    0x4a1dc6  offset 0xa1dc6 in Win32.GravityRAT.exe (0x4a1dc6)
+    0x500000  _CorExeMain+0x0 in extern-address space (0x0)  hooked by <SimProcedure _CorExeMain (stub)>
+
+[DFS]
+  stashes: {'deadended': 1}
+  deadended: 2 basic blocks, jumpkind Ijk_Ret
+    0x4a1dc6  offset 0xa1dc6 in Win32.GravityRAT.exe (0x4a1dc6)
+    0x500000  _CorExeMain+0x0 in extern-address space (0x0)  hooked by <SimProcedure _CorExeMain (stub)>
+
+====================================================================
+2. CFG COVERAGE
+====================================================================
+  functions 2   nodes 2   edges 1
+  executable bytes in the image: 657,668
+    0x4a1dc6  _start
+    0x500000  _CorExeMain
+
+====================================================================
+3. HOW MUCH OF THIS IS NATIVE CODE?
+====================================================================
+  .text raw size      657,920 B
+  CIL method bodies   1219
+  native code         6 B  (0.000912% of .text)
+  ratio               1 native instruction per 109,653 bytes of .text

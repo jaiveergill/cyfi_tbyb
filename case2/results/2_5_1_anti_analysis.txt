@@ -1,0 +1,157 @@
+==========================================================================
+2.5.1 (case 2)  ANTI-ANALYSIS IN THANOS: a build whose checks are mostly switched off
+==========================================================================
+  generated   2026-09-21 17:37:37 UTC
+  revision    83a68d8+dirty
+  source hash 0437d0a2536fd211  (anti_analysis.py, aot_bridge.py, callsite_map.py, managed_call_explorer.py, managed_runtime.py)
+  environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
+              Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
+  artifact    case2/samples/extracted/thanos.exe
+              84,480 bytes  sha256 58bfb9fa8889550d13f42473956dc2a7ec4f3abb18fd3faeaa38089d513c171f
+  artifact    case2/samples/extracted/thanos.exe.so
+              422,600 bytes  sha256 6d1bc4dd02ec8cc450ac17f13a1b62b06c7afaf985dc54f0a267940b25070cbc
+  entry point 4 methods carrying a check; .cctor for the config
+  technique   ManagedCallExplorer in both arms
+  models installed
+                mono AOT linkage table resolved (every plt_FOO -> FOO)
+                70 allocation sites typed from their `newobj`
+                256 `ldstr` literals written into their GOT slots
+                array allocation records its element count; stelem.ref modelled
+                System.Convert.FromBase64String decoded for real
+                per-object header so unbox/null checks read concrete
+                mono throw helpers modelled as not returning
+                String.Concat modelled at each arity the image uses, arrays included
+                uninitialised memory reads as zero
+                model: stelem.ref
+                model: System.Text.Encoding::GetString
+                model: System.Text.Encoding::GetBytes
+  budget      400 steps per entry point
+  note        the two arms differ only in what the checks return
+
+--------------------------------------------------------------------------
+1. THE BUILD'S CONFIGURATION, FROM .cctor
+--------------------------------------------------------------------------
+  Thanos is builder-produced: the affiliate's choices are compiled in
+  as `ldstr` constants assigned to static fields by the class
+  constructor, and `Main` gates each feature on `field == "YES"`.
+
+  boolean-looking flags set in .cctor : 46   [static]
+      on  (14): ELyYGppfySYfq, FsmxXwwVyXze, IUvwjPVcqFrE, JGjnyMyTennfuufcT, WgQvAOsxNeWD, ZPHPKQDuPKi, fCiJsjNmDGYo, gcOHYvBogGyw, ldDdAgsFLTkAX, mlQgpavlrIuX, nrUdlkCMdxZ, wEFLZtRchlX, xQMkqhCYTvWMq, ylIKJJsgdllsSVj
+      off (32): BtOESQEmmPY, FFbMRUzulqEpb, IBSndtoMdgy, JNHKDqKmSycXVyA, JntTsbLDjfdWrF, KkZoOVzwQPf, LDNdJBbfsdAY, OZagXxYpUbG, OZfhJywPQSn, PVCmRrdzBeoM, QDIBAwivbzugjctV, SMVGmorJMiSRUva, VgdNVBEBhpUPO, VneWBiDudYbxfV, WnYspfSeqpPPh, XKCeykQXWEYgem, YkwRnYlFytdkH, aWdGZORAeYAJ, amSYDuIqjtb, gremWWHIcFVT, kqxgiwAmxJZAF, lMBJRPlmLoPIJX, nEFvYMIALr, oCUqHyphdF, oiSsXsWUMOtEp, qqibCzLAGVg, rtiZKDwSQcOQoyu, rwJLUnGaYuk, udJVdpbosFv, uySjNlajuEE, zHSVICJAOa, zKSeEXflLrlh
+
+  other configuration constants:
+      HJhinhnlOMNxIX         = '100000000'
+      KRFQhWmJuhVexr         = 'LD2WALLJZR93XK10KS892LMU006ZXO3Q'
+      KYDuKlMFWLOzqeDUz      = 'mystartup.lnk'
+      LcFYzbWwUuFdZ          = 'VGhhbm9z'
+      YQBusMLxsiehe          = '3747bdbf-0ef0-42d8-9234-70d68801f407'
+      efojwxvnMIbXXP         = '0'
+      oarFYicwLcOiB          = 'LOGONISOFF'
+      rqOtfqTYGrTie          = 'SW5mb3JtYXRpb24uLi4='
+      tsQtKfDKZIMNuO         = '10'
+      uOyyfFtzedTPufn        = '1'
+      wrCDlMOHoXr            = 'WW91ciBGaWxlcyBhcmUgRW5jcnlwdGVkLg0KDQpEb27igJl0IHdvcnJ5LCB5b...'   (456 chars, elided)
+
+  gates in Main that test one of these: 27   [static]
+      IL 0x001d  gcOHYvBogGyw           == 'YES'   (.cctor sets 'YES')  -> OPEN
+      IL 0x005c  kqxgiwAmxJZAF          == 'YES'   (.cctor sets 'NO')  -> CLOSED
+      IL 0x007f  wEFLZtRchlX            == 'YES'   (.cctor sets 'YES')  -> OPEN
+      IL 0x00c0  mlQgpavlrIuX           == 'YES'   (.cctor sets 'YES')  -> OPEN
+      IL 0x01ec  qqibCzLAGVg            == 'YES'   (.cctor sets 'NO')  -> CLOSED
+      IL 0x0218  IUvwjPVcqFrE           == 'YES'   (.cctor sets 'YES')  -> OPEN
+      IL 0x0231  PVCmRrdzBeoM           == 'YES'   (.cctor sets 'NO')  -> CLOSED
+      IL 0x0251  udJVdpbosFv            == 'YES'   (.cctor sets 'NO')  -> CLOSED
+      IL 0x0284  LDNdJBbfsdAY           == 'YES'   (.cctor sets 'NO')  -> CLOSED
+      IL 0x02d4  SMVGmorJMiSRUva        == 'YES'   (.cctor sets 'NO')  -> CLOSED
+      IL 0x0320  JNHKDqKmSycXVyA        == 'YES'   (.cctor sets 'NO')  -> CLOSED
+      IL 0x03ae  lMBJRPlmLoPIJX         == 'YES'   (.cctor sets 'NO')  -> CLOSED
+      IL 0x03e1  zHSVICJAOa             == 'YES'   (.cctor sets 'NO')  -> CLOSED
+      IL 0x057c  ELyYGppfySYfq          == 'YES'   (.cctor sets 'YES')  -> OPEN
+      IL 0x05d2  OZagXxYpUbG            == 'YES'   (.cctor sets 'NO')  -> CLOSED
+      IL 0x05e6  VgdNVBEBhpUPO          == 'NO'   (.cctor sets 'NO')  -> OPEN
+      IL 0x061e  ldDdAgsFLTkAX          == 'YES'   (.cctor sets 'YES')  -> OPEN
+      IL 0x0a8b  FsmxXwwVyXze           == 'NO'   (.cctor sets 'YES')  -> CLOSED
+      IL 0x0b9e  JGjnyMyTennfuufcT      == 'YES'   (.cctor sets 'YES')  -> OPEN
+      IL 0x0c2c  FsmxXwwVyXze           == 'NO'   (.cctor sets 'YES')  -> CLOSED
+      ... and 7 more
+
+  So most of this build's optional behaviour, including part of the
+  anti-analysis, is switched off before any check runs. That is this
+  build, not Thanos generally, and it comes out without executing
+  anything.  [static]
+
+--------------------------------------------------------------------------
+2. THE LISTS .cctor BUILDS, RECOVERED BY EXECUTING IT
+--------------------------------------------------------------------------
+  strings captured at the collections' Add calls: 73   [symbolic]
+  Each is a base64 `ldstr` constant decoded at run time by an in-image
+  helper; the decoder is modelled by `Convert.FromBase64String`, so
+  these come back as text rather than as symbols.
+
+      <unresolved>            svchst.exe              crcss.exe               chrome32.exe          
+      firefox.exe             calc.exe                mysqld.exe              dllhst.exe            
+      opera32.exe             memop.exe               spoolcv.exe             ctfmom.exe            
+      SkypeApp.exe            <unresolved>            stop McAfeeDLPAgentService /y  stop mfewc /y         
+      stop BMR Boot Service /y  stop NetBackup BMR MTFTP Service /y  stop DefWatch /y        stop ccEvtMgr /y      
+      stop ccSetMgr /y        stop SavRoam /y         stop RTVscan /y         stop QBFCService /y   
+      stop QBIDPService /y    stop Intuit.QuickBooks.FCS /y  stop QBCFMonitorService /y  stop YooBackup /y     
+      stop YooIT /y           stop zhudongfangyu /y   stop stc_raw_agent /y   stop VSNAPVSS /y      
+      stop VeeamTransportSvc /y  stop VeeamDeploymentService /y  stop VeeamNFSSvc /y     stop veeam /y         
+      stop PDVFSService /y    stop BackupExecVSSProvider /y  stop BackupExecAgentAccelerator /y  stop BackupExecAgentBrowser /y
+      stop BackupExecDiveciMediaService /y  stop BackupExecJobEngine /y  stop BackupExecManagementService /y  stop BackupExecRPCService /y
+      stop AcrSch2Svc /y      stop AcronisAgent /y    stop CASAD2DWebSvc /y   stop CAARCUpdateSvc /y
+      stop sophos /y          <unresolved>            config SQLTELEMETRY$ECWDB2 start= disabled  config SQLWriter start= disabled
+      config SstpSvc start= disabled  <unresolved>            /IM mydesktopqos.exe /F  /IM mydesktopservice.exe /F
+      Delete Shadows /all /quiet  resize shadowstorage /for=c: /on=c: /maxsize=401MB  resize shadowstorage /for=c: /on=c: /maxsize=unbounded  resize shadowstorage /for=d: /on=d: /maxsize=401MB
+      resize shadowstorage /for=d: /on=d: /maxsize=unbounded  resize shadowstorage /for=e: /on=e: /maxsize=401MB  resize shadowstorage /for=e: /on=e: /maxsize=unbounded  resize shadowstorage /for=f: /on=f: /maxsize=401MB
+      resize shadowstorage /for=f: /on=f: /maxsize=unbounded  resize shadowstorage /for=g: /on=g: /maxsize=401MB  resize shadowstorage /for=g: /on=g: /maxsize=unbounded  resize shadowstorage /for=h: /on=h: /maxsize=401MB
+      resize shadowstorage /for=h: /on=h: /maxsize=unbounded  Delete Shadows /all /quiet  <unresolved>            /s /f /q d:\*.VHD d:\*.bac d:\*.bak d:\*.wbcat d:\*.bkf d:\Backup*.* d:\backup*.* d:\*.set d:\*.win d:\*.dsk
+      /s /f /q e:\*.VHD e:\*.bac e:\*.bak e:\*.wbcat e:\*.bkf e:\Backup*.* e:\backup*.* e:\*.set e:\*.win e:\*.dsk
+
+  `.cctor` fills several collections, and executing it walks all of
+  them in order: first the process names the sample watches for or
+  masquerades as, then the `net stop` service list, then the
+  `vssadmin` shadow-copy commands and the backup-file wildcards.
+  Entries marked <unresolved> are ones whose GOT literal slot the
+  recovery declined to claim. They did not decode to nothing.
+
+  These strings come off an executed path, not from guessing at
+  nearby API names -- they are read out of the state at the `Add`
+  call that stores them, after the in-image base64 helper has run on
+  them.  [symbolic]
+
+--------------------------------------------------------------------------
+3. FORCING THE CHECKS THAT DO RUN
+--------------------------------------------------------------------------
+  forced symbols: 8
+      MufMaOSvGyvz_ghEykQIAJr_CheckRemoteDebuggerPresent_intptr_bool_
+      MufMaOSvGyvz_xxKHdLdCMeOG_NtSetInformationProcess_intptr_int_int__int
+      System_Diagnostics_Process_EnterDebugMode
+      System_Diagnostics_Process_GetProcessesByName_string
+      _icall_native_MufMaOSvGyvz_ghEykQIAJr_CheckRemoteDebuggerPresent_intptr_bool_
+      _icall_native_MufMaOSvGyvz_xxKHdLdCMeOG_NtSetInformationProcess_intptr_int_int__int
+      wrapper_managed_to_native_MufMaOSvGyvz_ghEykQIAJr_CheckRemoteDebuggerPresent_intptr_bool_
+      wrapper_managed_to_native_MufMaOSvGyvz_xxKHdLdCMeOG_NtSetInformationProcess_intptr_int_int__int
+
+  arm                                  blocks    runtime callees reached
+  left to the model                       148                          2
+  forced: not being analysed              148                          2
+
+  reachable only when forced : (none)
+  reachable only unforced    : (none)
+
+  Forcing changes nothing that is reachable. Same reason as on
+  GravityRat: the checks are backed by calls this analysis models
+  rather than performs, and those models return unconstrained values,
+  so both sides of every check are explored anyway. Forcing makes the
+  two outcomes separately attributable. It does not unlock anything.
+  [symbolic]
+
+--------------------------------------------------------------------------
+EVIDENCE CLASSES USED ABOVE
+--------------------------------------------------------------------------
+  [static]      static observation - read out of the PE, the metadata or the AOT image
+  [symbolic]    symbolic observation - produced by execution under the models listed
+  [inference]   inference - argued from the two above, not directly observed
+  [fixture]     supplied fixture - a value this analysis provided, not one it recovered
+  [unresolved]  unresolved - the analysis did not recover this value

@@ -1,0 +1,184 @@
+==========================================================================
+2.1  STATIC TRIAGE
+==========================================================================
+  generated   2026-09-21 17:33:25 UTC
+  revision    83a68d8+dirty
+  source hash 45b8866ba530ad74  (static_triage.py)
+  environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
+              Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
+  artifact    case2/samples/extracted/thanos.exe
+              84,480 bytes  sha256 58bfb9fa8889550d13f42473956dc2a7ec4f3abb18fd3faeaa38089d513c171f
+
+
+========================================================================
+IDENTITY
+========================================================================
+  path        case2/samples/extracted/thanos.exe
+  size        84,480 bytes
+  md5         e01e11dca5e8b08fc8231b1cb6e2048c
+  sha1        4983d07f004436caa3f10b38adacbba6a4ede01a
+  sha256      58bfb9fa8889550d13f42473956dc2a7ec4f3abb18fd3faeaa38089d513c171f
+  machine     x86 (32-bit)
+  entry RVA   0x15eae
+  image base  0x400000
+  CLI header  rva 0x2008 size 72   -> .NET assembly
+
+========================================================================
+SECTIONS
+========================================================================
+  .text      vaddr 0x00002000  raw    81,920 B  entropy 5.52  X
+  .rsrc      vaddr 0x00016000  raw     1,536 B  entropy 4.46   
+  .reloc     vaddr 0x00018000  raw       512 B  entropy 0.10   
+
+========================================================================
+NATIVE IMPORTS
+========================================================================
+  mscoree.dll: _CorExeMain
+
+========================================================================
+ENTRY POINT
+========================================================================
+  0x415eae  jmp dword ptr [0x402000]
+  0x415eb4  add byte ptr [eax], al
+  0x415eb6  add byte ptr [eax], al
+
+========================================================================
+ASSEMBLY REFERENCES (runtime dependencies)
+========================================================================
+  mscorlib                         4.0.0.0
+  System                           4.0.0.0
+  System.Windows.Forms             4.0.0.0
+  System.Drawing                   4.0.0.0
+  System.Core                      4.0.0.0
+  Microsoft.VisualBasic            10.0.0.0
+  System.Management                4.0.0.0
+
+========================================================================
+TYPEDEFS (code in this assembly)
+========================================================================
+  <Module>
+  MufMaOSvGyvz.IyUWqQZlcOSTLhq
+      23 method(s): Main, zstTHeVErMkJUU, DPxcFgWfJlePTF, tsTJYQCcBKUvsb, tbluQOozLSqDhFc, TQpGafavBJI, HiawheccNGktKh, jKGdMalhZeKXBCvc, XQYrYiACEjRdNrb, glLILXcrbW, BvfGoSdlqjPP, TQsIfIHUHFwOo ...
+  jtxivXeSYrLUbhy
+      4 method(s): SearchFiles, WalkDirectoryTree, .ctor, .cctor
+  qnaQFtvgrosG
+      2 method(s): .ctor, <Main>b__5
+  ldXpuSFdlzXsf
+      1 method(s): .ctor
+  uKOVEKzchnPsIO
+      2 method(s): .ctor, <Crypt>b__d
+  WbDnpXySnYPBD
+      2 method(s): .ctor, <WorkerCrypter2>b__15
+  IzImQwKqnmdl
+      3 method(s): .ctor, <Encrypt2>b__18, <Encrypt2>b__19
+  MufMaOSvGyvz.EOjDcEpeLmEa
+      2 method(s): BkigirNyAye, .ctor
+  MufMaOSvGyvz.MZxLtJzLRoIRU
+      7 method(s): vtOeVWNQhPdxNt, RZJqgaZnLiq, TRUYlwuenMOlx, .ctor, <Killproc>b__5, <Killproc>b__6, .cctor
+  WaYodAhqFAmW
+      2 method(s): .ctor, <Killproc>b__4
+  MufMaOSvGyvz.ghEykQIAJr
+      9 method(s): aiPqAgDxThSDE, KQTbTNGxpggJ, GMkUrUdhErRTAQ, kNJZaDsXbWYmUdO, CmOCZJRfKEYgY, ITHbNNuWEzvcy, GetModuleHandle, CheckRemoteDebuggerPresent, .ctor
+  MufMaOSvGyvz.QLRuRgFESyg
+      4 method(s): PXPqDNdvjDrC, EMcqPPGfGFVx, PdnmizvzKFUCL, tMApihKJxn
+  MufMaOSvGyvz.xxKHdLdCMeOG
+      3 method(s): NtSetInformationProcess, bfVvoFmZrqIvYF, DfTRTAsuFViXE
+  MufMaOSvGyvz.biNPKopUkiSJuO
+      3 method(s): .ctor, SystemParametersInfo, UnNeRUofkpwgP
+  MufMaOSvGyvz.IxJlmmAtIYbweZ
+      6 method(s): DtsYjXXFKl, WPuYWIHaxaiFwM, aWbHWMZJwBHx, ebvNzgnWqxnEn, .ctor, .cctor
+  MufMaOSvGyvz.tOQtIRDNrGpD
+      8 method(s): GetKernelObjectSecurity, SetKernelObjectSecurity, GetCurrentProcess, ywIDKStthl, kXXdBYnfnvZP, UErUYvArZJESJ, jkSoOuByvlwrEF, .ctor
+  MufMaOSvGyvz.MfnxCHhUwIjyzc
+      4 method(s): HHmRdTUQTZoj, qkCGSsikzw, OahdOXOuXvYsd, .ctor
+  MufMaOSvGyvz.MPimnsOrmpnAX
+      1 method(s): IjTKmPwIgCf
+  MufMaOSvGyvz.KcMVbmuWfLLu
+      6 method(s): QKUAgIgehqhgaII, WlhScCxrQrX, BoSCJSlNmajL, LEIoJQVMxfkG, kPyKyfjfqiSbKn, .cctor
+  MufMaOSvGyvz.OwlpRzDmPpi
+      2 method(s): KXPzXivlwAnerFl, GetBroadcastAddress
+  MufMaOSvGyvz.VJsusgqzfWSrbMi
+      8 method(s): .ctor, get_MacAddress, set_MacAddress, get_IPAddress, set_IPAddress, waPssoquJEsup, DlYLhXnJueaptK, <GetIPInfo>b__3
+  MufMaOSvGyvz.uxsJIvhyQFYmmD
+      2 method(s): YvYIrpWzUqcA, .ctor
+  MufMaOSvGyvz.yZSyNMrNhJ
+      4 method(s): vIrcBMpRPIYwNsX, OgulqRNbIpMUL, GoOtXsDsUX, vGnSKjsiWPsmf
+  MufMaOSvGyvz.FAripJTXHNalmT
+      30 method(s): HVdDOGYwRUMbY, aCnqtSuKCmAZoP, QmucamfUxZMxrb, bTnVewWeool, OpenProcess, VirtualAllocEx, VirtualFreeEx, CloseHandle, WriteProcessMemory, ReadProcessMemory, GetWindowThreadProcessId, SendMessage ...
+  dKbHtpDNcyBx
+  lowFQsJSlrFgr.qMyHPNTWke
+      16 method(s): CloseHandle, OpenProcess, ReadProcessMemory, WriteProcessMemory, VirtualProtectEx, Module32Next, Module32First, CreateToolhelp32Snapshot, VirtualAllocEx, ZdomFWCkgYpQtg, lXdpDSlyROWslu, dLZDqvevdgBbx ...
+  kKiURvoHFZukizJ
+  MufMaOSvGyvz.ILwfcQVhzflf
+      5 method(s): CreateFile, WriteFile, hvKwMSNYgA, .ctor, .cctor
+  MufMaOSvGyvz.PDPmvqgvIguXKGS
+      3 method(s): BPwwjcgjbB, .ctor, .cctor
+  FBqQxbujAkO
+      18 method(s): get_APmUqWqGqXhZg, get_peMgjfIzVGWqUKjBsb, set_peMgjfIzVGWqUKjBsb, get_KvNZJAMjCVsdYlb, set_KvNZJAMjCVsdYlb, get_kvXUHrmDwjogj, set_kvXUHrmDwjogj, get_uthEHKoaLAbUg, set_uthEHKoaLAbUg, set_ELHnWikFFpqxRW, get_xAvWKKHxzJVu, set_xAvWKKHxzJVu ...
+  MufMaOSvGyvz.jMDFRLEyorejfI
+      6 method(s): GetSystemMetrics, vgwIjtaVyLLgbVk, tTkvXnIXBUwQ, jIBYuxgbcSbmfjK, CFPjirxGMKMKPt, .ctor
+  MufMaOSvGyvz.vuLsRXwWyejEQ
+      3 method(s): WlANBWeixWsiJ, SgSstmnvQSBQg, .ctor
+  MufMaOSvGyvz.hpvgypLXixi
+      3 method(s): YfdgCPKijzed, .ctor, .cctor
+  NojSIGbFtqS
+  cCbYUyvbWxEjs
+  rjtZIZNLnIgx
+  ivodzAXFCaZlxbD
+  sYUxKRatpCV
+
+========================================================================
+TYPEREFS (external API surface)
+========================================================================
+    33  System
+    16  System.IO
+    15  System.Security.Cryptography
+     9  System.Net
+     7  System.Security.AccessControl
+     7  System.Management
+     6  System.Windows.Forms
+     5  System.Runtime.CompilerServices
+     5  System.Runtime.InteropServices
+     5  System.Threading
+     5  System.Security.Principal
+     4  System.Diagnostics
+     4  Microsoft.Win32
+     3  System.Collections.Generic
+     3  
+     3  System.Drawing
+     3  System.Reflection
+     3  System.Net.NetworkInformation
+     2  System.Text
+     2  System.Threading.Tasks
+     2  System.Net.Sockets
+     1  System.Collections.Specialized
+     1  System.Security.Claims
+     1  System.Linq
+
+========================================================================
+CAPABILITY INDICATORS IN TYPEREFS
+========================================================================
+  Net               14  e.g. System.Net.Dns
+  Sockets            2  e.g. System.Net.Sockets.AddressFamily
+  Http               0
+  Cryptography      15  e.g. System.Security.Cryptography.Aes
+  IO                16  e.g. System.IO.Directory
+  Registry           0
+  Diagnostics        4  e.g. System.Diagnostics.Process
+  Reflection         3  e.g. System.Reflection.Assembly
+  Threading          7  e.g. System.Threading.Mutex
+  Management         7  e.g. System.Management.ManagementBaseObject
+  Forms              6  e.g. System.Windows.Forms.DialogResult
+  InteropServices    5  e.g. System.Runtime.InteropServices.DispIdAttribute
+
+========================================================================
+MANIFEST RESOURCES / FIELD RVA
+========================================================================
+  ManifestResource rows: 0
+  FieldRva rows: 8   (embedded byte arrays present)
+
+========================================================================
+STRINGS
+========================================================================
+  ascii runs >=8 chars: 723  unique: 723
+  #US heap size: 26,904 bytes

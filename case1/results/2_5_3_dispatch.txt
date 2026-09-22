@@ -1,0 +1,108 @@
+==========================================================================
+2.5.3  COMMAND DISPATCH: symbolic TaskName over the only routine that switches on it
+==========================================================================
+  generated   2026-09-21 17:33:24 UTC
+  revision    83a68d8+dirty
+  source hash 55e87bebc3947685  (aot_bridge.py, callsite_map.py, dispatch_analysis.py, managed_call_explorer.py, managed_runtime.py)
+  environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
+              Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
+  artifact    case1/samples/extracted/Win32.GravityRAT.exe
+              660,480 bytes  sha256 1c0ea462f0bbd7acfdf4c6daf3cb8ce09e1375b766fbd3ff89f40c0aa3f4fc96
+  artifact    case1/samples/extracted/Win32.GravityRAT.exe.so
+              1,134,552 bytes  sha256 776deb59fbd370cc988f57cb51a12337c59e826d1e185ce6b20b49de8e9e50a4
+  entry point LSASS_Core_Manager__c__DisplayClass5_0__UpdateServerb__2  0x440320-0x440684
+  symbolic in task_name, a free 32-bit symbol written into [task + 0x20] (the field the compiled code reads)
+  technique   arm 1: angr default (BFS) | arm 2: ManagedCallExplorer
+  models installed
+                mono AOT linkage table resolved (every plt_FOO -> FOO)
+                257 allocation sites typed from their `newobj`
+                178 `ldstr` literals written into their GOT slots
+                per-object header so unbox/null checks read concrete, selecting no callee
+                mono throw helpers modelled as not returning
+                String.Concat modelled at each arity the image uses
+                uninitialised memory reads as zero (CLR zero-initialises managed memory)
+                33 host-fact getters replaced by labelled fixtures (LSASS.Models.Identification.*)
+                jump table reconstructed and written to GOT slot 0x4819d0
+                closure and task objects constructed by hand (see below)
+  budget      150 steps
+  note        entered mid-program: this maps the routine, not the whole build
+
+--------------------------------------------------------------------------
+RECONSTRUCTING THE JUMP TABLE, AND CHECKING IT
+--------------------------------------------------------------------------
+  GOT slot the switch reads : 0x4819d0   value in the image: 0x0
+  arms recovered from the image : 8   [static]
+  distinct CIL switch targets   : 8   [static]
+  default block, read from the bounds check `b.hs` : 0x440668   [static]
+
+  Each native arm's first outgoing call is compared with the callee
+  the CIL invokes first at the IL offset the switch pairs it with.
+  Checking only that an arm contains some call would pass anything.
+
+      IL       arm         native first managed call                      CIL callee window at that offset                       match
+      0x0057   0x00044036c LSASS_Core_Tasks_ScanManager_get_Instance      LSASS.Core.Tasks.ScanManager::get_Instance / LSASS.C   yes
+      0x0077   0x0004403c8 LSASS_Core_Tasks_UploadManager_Start_string    LSASS.Core.Tasks.UploadManager::Start                  yes
+      0x0092   0x000440414 LSASS_Core_Tasks_PortManager_Start             LSASS.Core.Tasks.PortManager::Start                    yes
+      0x00a2   0x000440458 LSASS_Core_Tasks_ProcessManager_Start_bool     LSASS.Core.Tasks.ProcessManager::Start                 yes
+      0x00b0   0x0004404a0 string_IsNullOrWhiteSpace_string               LSASS.Models.Task::get_Args / System.String::IsNullO   yes
+      0x00da   0x00044050c LSASS_Core_Tasks_ServicesManager_Start_bool    LSASS.Core.Tasks.ServicesManager::Start                yes
+      0x00e8   0x000440554 LSASS_Properties_Settings_get_IsUsb            LSASS.Properties.Settings::get_Default / LSASS.Prope   yes
+      0x0106   0x0004405e0 LSASS_Properties_Settings_get_IsUsb            LSASS.Properties.Settings::get_Default / LSASS.Prope   yes
+
+  -> 8 of 8 arms match the CIL callee  [static]
+
+--------------------------------------------------------------------------
+COMMAND -> HANDLER, WITH A WITNESS FOR EACH
+--------------------------------------------------------------------------
+  val  TaskName        arm         witness  handler entered (first call in the arm)              behaviour
+  0    StartU          0x000440554 0        LSASS_Properties_Settings_get_IsUsb                  if !Settings.IsUsb: Instance.Start() -> respFile (USB monitor on)
+  1    StopU           0x0004405e0 1        LSASS_Properties_Settings_get_IsUsb                  if  Settings.IsUsb: Instance.Stop()  -> respFile (USB monitor off)
+  2    PortScan        0x000440414 2        LSASS_Core_Tasks_PortManager_Start                   Start() -> respFile                              (port scan)
+  3    ProcessScan     0x000440458 3        LSASS_Core_Tasks_ProcessManager_Start_bool           Start(1) -> respFile                             (process scan)
+  4    ServicesScan    0x00044050c 4        LSASS_Core_Tasks_ServicesManager_Start_bool          Start(1) -> respFile                             (services scan)
+  5    DriveScan       0x00044036c 5        LSASS_Core_Tasks_ScanManager_get_Instance            Instance.Start(locals.filePath) -> respFile      (drive enumeration)
+  6    DriveUpload     0x0004403c8 6        LSASS_Core_Tasks_UploadManager_Start_string          Start(locals.filePath) -> respFile               (drive upload)
+  7    RunCmd          0x0004404a0 7        string_IsNullOrWhiteSpace_string                     if !IsNullOrWhiteSpace(_task.Args): Start(_task.Args) -> respFile   (shell command, argument-carrying)
+  8    StartTcpCmd     default     -        -                                                    the shared tail: OnCompleted(_task, respFile)    (no arm of its own)
+  9    StopTcpCmd      default     -        -                                                    the shared tail: OnCompleted(_task, respFile)    (no arm of its own)
+  10   StartBroadCast  default     -        -                                                    the shared tail: OnCompleted(_task, respFile)    (no arm of its own)
+  11   StopBroadCast   default     -        -                                                    the shared tail: OnCompleted(_task, respFile)    (no arm of its own)
+  12   SelfDestroy     default     -        -                                                    the shared tail: OnCompleted(_task, respFile)    (no arm of its own)
+
+  handlers reached, default (BFS)      : 8/8   steps 18  peak 15  1.0s
+  handlers reached, ManagedCallExplorer: 8/8   steps 150  peak 25  5.7s
+  reached only by the technique        : (none)
+  reached only by the default          : (none)
+
+  Both arms reach every handler. Once the jump table is reconstructed
+  the switch is an ordinary 13-way branch on a symbolic value, which
+  angr's default manager forks correctly on its own. So this part of
+  the result comes from the runtime modelling, not the technique.
+  [symbolic]
+
+--------------------------------------------------------------------------
+VALUES 8-12
+--------------------------------------------------------------------------
+  The compiled bounds check is `mov x30,#0xd; cmp w25,w30; b.hs default`,
+  so 0..12 index the table and 13+ skip it. Table entries 8..12 all hold
+  the default block, because CIL switch targets 8..12 are all 81550, which is
+  the shared tail. So StartTcpCmd, StopTcpCmd, StartBroadCast,
+  StopBroadCast and SelfDestroy are declared in the enum and are not
+  handled here: they fall to `OnCompleted(_task, respFile)` and produce
+  no action.  [static, from the switch instruction]
+
+  How far that goes: `get_TaskName` has two consumers in the
+  assembly. This lambda is one; the other is `UpdateServer` itself,
+  which uses it to build a progress string (IL 0x011C -> String.Concat
+  -> OnProgress), not to dispatch. So there is no second dispatcher on
+  TaskName. That covers the TaskName enum and this routine only. The
+  build may well have another command surface elsewhere.  [static]
+
+--------------------------------------------------------------------------
+EVIDENCE CLASSES USED ABOVE
+--------------------------------------------------------------------------
+  [static]      static observation - read out of the PE, the metadata or the AOT image
+  [symbolic]    symbolic observation - produced by execution under the models listed
+  [inference]   inference - argued from the two above, not directly observed
+  [fixture]     supplied fixture - a value this analysis provided, not one it recovered
+  [unresolved]  unresolved - the analysis did not recover this value

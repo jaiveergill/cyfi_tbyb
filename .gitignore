@@ -19,6 +19,3 @@ case1/de4dot/
 __pycache__/
 *.pyc
 
-# generated results
-case1/results/
-case2/results/
