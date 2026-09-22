@@ -38,6 +38,8 @@ for f in "$G" "$T" "$G.so" "$T.so"; do
   [ -f "$f" ] || { echo "missing $f -- see README.md, 'Samples'"; exit 2; }
 done
 
+mkdir -p case1/results case2/results
+
 echo "=== case 1: Win32.GravityRat ==="
 run 2.1   case1 case1/results/2_1_static_triage.txt      $PY tools/static_triage.py "$G"
 run 2.2a  case1 case1/results/2_2_native_code_audit.txt  $PY tools/native_code_audit.py "$G"
@@ -65,20 +67,14 @@ run 2.5.1 case2 case2/results/2_5_1_anti_analysis.txt    $PY case2/scripts/anti_
 run 2.5.2 case2 case2/results/2_5_2_outbound_capture.txt $PY case2/scripts/outbound_capture.py
 
 # de4dot needs the .NET SDK and a built checkout; it is the one step that can be
-# absent on a fresh machine, so it is optional and never fails the run. The
-# result file it produces is kept in the repository either way.
+# absent on a fresh machine, so it is optional and never fails the run.
 DE4DOT=case1/de4dot/Release/netcoreapp3.1/de4dot.dll
 if { [ -z "$FILTER" ] || [ "$FILTER" = case2 ] || [ "$FILTER" = 2.3 ]; } \
    && command -v dotnet >/dev/null && [ -f "$DE4DOT" ]; then
   run 2.3d  case2 case2/results/2_3_de4dot_detect.txt dotnet "$DE4DOT" -d "$T"
 else
   printf '  %-9s %-44s %s\n' 2.3d case2/results/2_3_de4dot_detect.txt \
-    "skipped (needs dotnet + a built de4dot; existing file kept)"
-fi
-
-if [ -z "$FILTER" ]; then
-  echo "=== evidence index ==="
-  $PY tools/evidence_index.py || FAIL=1
+    "skipped (needs dotnet + a built de4dot)"
 fi
 
 [ $FAIL -eq 0 ] && echo "all results regenerated" || echo "one or more steps FAILED"

@@ -1,4 +1,0 @@
-
-de4dot v3.1.41592.3405
-
-Detected Unknown Obfuscator (/home/jg/cyfi-project/case2/samples/extracted/thanos.exe)
