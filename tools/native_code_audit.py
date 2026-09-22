@@ -35,10 +35,7 @@ def audit_native(path):
 
     # Every method body belonging to a TypeDef is CIL, not machine code.
     # A body whose header does not parse, or whose declared size exceeds the
-    # file, is not readable statically -- on a packed sample the bodies have
-    # been relocated into an encrypted section and the header bytes are
-    # ciphertext. Those are counted separately rather than summed, because
-    # summing ciphertext-derived sizes produces a meaningless total.
+    # file, is counted separately rather than summed into the total.
     secs = [(sec.VirtualAddress,
              sec.VirtualAddress + max(sec.Misc_VirtualSize, sec.SizeOfRawData),
              sec.Name.rstrip(b"\x00")) for sec in pe.sections]

@@ -164,10 +164,8 @@ def expected_callees(exe_path):
             calls = [(i.offset - body.offset, cd.resolve(tokens, pe, i.operand))
                      for i in body.instructions
                      if i.opcode.name in ("call", "callvirt", "newobj")]
-            # Each arm's window is bounded by the *next* arm's IL offset, so it
-            # cannot borrow a callee from its neighbour. Without that bound a
-            # window of three bleeds into the following arm and a rotated
-            # pairing still scores 6/8 -- i.e. the check barely tests anything.
+            # Each arm's window is bounded by the next arm's IL offset, so
+            # it cannot borrow a callee from its neighbour.
             bounds = sorted({t for t in IL_SWITCH if t != IL_DEFAULT}) + [IL_DEFAULT]
             out = {}
             for il, nxt in zip(bounds, bounds[1:]):

@@ -42,8 +42,7 @@ import callsite_map as csmap       # noqa: E402
 logging.getLogger("angr").setLevel(logging.CRITICAL)
 logging.getLogger("cle").setLevel(logging.CRITICAL)
 
-# Scratch regions. Kept far apart so an address identifies its own kind on
-# sight, which makes a trace readable without a lookup.
+# Scratch regions, kept far apart so an address identifies its own kind.
 HEAP = 0xE8000000        # objects handed out by the allocator
 HEAP_STRIDE = 0x400
 HEADERS = 0xF4000000     # per-object type headers (see new_object)
@@ -152,8 +151,7 @@ def new_object(state, type_name=None):
     # ending in a comparison against a type handle the GOT would supply. Both
     # links are given a mapped, zero-filled block so that the walk reads
     # concrete zero and matches the (also zero) handle, i.e. the check passes.
-    # This declares "the value has the type the code expects"; it selects no
-    # callee, so it cannot put one type's method on another type's object.
+    # Not a vtable: no callee is selected out of it.
     state.memory.store(hdr, claripy.BVV(hdr + HEADER_STRIDE // 2, 64), endness=end)
     if type_name:
         # globals is copied per state, so the map has to be immutable to stay
@@ -258,9 +256,7 @@ class ManagedStub(angr.SimProcedure):
             return claripy.BVV(0, st.arch.bits)
         if self.kind == "string":
             # A labelled fixture, not a recovered value. It names the method
-            # that would have produced it, so anything downstream that captures
-            # it -- a beacon field, a request body -- carries its own provenance
-            # and cannot be mistaken for data read off a real host.
+            # that would have produced it.
             return claripy.BVV(new_string(st, f"<{self.label}>"), st.arch.bits)
         if self.kind == "ref":
             return claripy.BVV(new_object(st, self.type_name), st.arch.bits)
@@ -646,12 +642,9 @@ class ManagedRuntime:
         self.syms = ab.aot_symbols(self.proj)
         self.literals, self.lit_conflicts, self.lit_corroborated = \
             csmap.literal_map(self.report)
-        # A callee that the validation found using more than one vtable slot is
-        # a misalignment somewhere, and there is no way to tell which of its
-        # sites is the wrong one. Recording the conflict in the report but then
-        # installing every site anyway would let the bad mapping run; the sites
-        # are moved to `unresolved` instead, so the technique quarantines them
-        # with a diagnostic rather than executing a callee that may be wrong.
+        # A callee using more than one vtable slot is a misalignment, and
+        # there is no telling which of its sites is wrong. Its sites go to
+        # `unresolved` rather than being installed.
         by_token = {}
         for r in self.report["resolved"]:
             if r.get("token") is not None:
@@ -675,8 +668,7 @@ class ManagedRuntime:
                             if a.get("owner")}
         self.signatures = self._signatures()
         # (declaring type, slot) -> callee, learned from the sites that did
-        # resolve. This is what makes a receiver's recorded type enough to
-        # resolve a site the static alignment could not close.
+        # resolve.
         self.by_type_slot = {}
         for r in self.report["resolved"]:
             if r["owner"] and r["slot"] is not None:
@@ -786,11 +778,7 @@ class ManagedRuntime:
             self.proj.hook(addr, proc)
             self.stubs[name] = addr
         # A stub per resolved-but-unmodelled callee, typed from the callee's
-        # own metadata signature. Handing all of them one `kind="ref"` stub --
-        # which an earlier version did -- returns a fresh object where the
-        # caller expects an int, a bool or nothing at all. Measured consequence:
-        # `Object::ToString` returned an object, so every beacon value that
-        # passed through it read back as unresolved.
+        # own metadata signature, so it returns the kind the caller expects.
         self._typed_stubs = {}
         for rec in self.sites.values():
             callee = (f"{rec['owner']}::{rec['method']}" if rec.get("owner")

@@ -93,10 +93,8 @@ def run(arm):
         models = models + [f"{hooked} call sites installed as plain 4-byte "
                            f"project.hook() calls; no ExplorationTechnique"]
 
-    # Resolve every entry point up front and refuse to run if one is missing.
-    # Skipping silently -- which an earlier version did -- means a mistyped
-    # symbol quietly shrinks the experiment while the header still advertises
-    # the full list.
+    # Resolve every entry point up front and refuse to run if one is
+    # missing, so a mistyped symbol cannot silently shrink the experiment.
     resolved = [(n, rt.address_of(n)) for n in ENTRIES]
     missing = [n for n, a in resolved if a is None]
     if missing:

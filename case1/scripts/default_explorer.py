@@ -63,8 +63,7 @@ def main():
     for insn in block.capstone.insns:
         print(f"    {insn.address:#x}  {insn.mnemonic} {insn.op_str}")
 
-    # If breadth-first and depth-first agree exactly, then search order is not
-    # what limits the result -- and search order is the only thing an
+    # Breadth-first against depth-first: search order is the only thing an
     # ExplorationTechnique controls.
     rule("1. DEFAULT (BFS) vs DFS")
     explore(proj, None, "default BFS")

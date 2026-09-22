@@ -1,15 +1,15 @@
 ==========================================================================
 2.5  CONTROLLED COMPARISON: default exploration against ManagedCallExplorer
 ==========================================================================
-  generated   2026-09-21 17:32:28 UTC
-  revision    83a68d8+dirty
-  source hash b0eb32cab8aa0154  (aot_bridge.py, callsite_map.py, explorer_comparison.py, managed_call_explorer.py, managed_runtime.py)
+  generated   2026-09-22 05:17:32 UTC
+  revision    8cba7ba+dirty
+  source hash 40751b89c1e3851b  (aot_bridge.py, callsite_map.py, explorer_comparison.py, managed_call_explorer.py, managed_runtime.py)
   environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
               Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
   artifact    case1/samples/extracted/Win32.GravityRAT.exe
               660,480 bytes  sha256 1c0ea462f0bbd7acfdf4c6daf3cb8ce09e1375b766fbd3ff89f40c0aa3f4fc96
   artifact    case1/samples/extracted/Win32.GravityRAT.exe.so
-              1,134,552 bytes  sha256 776deb59fbd370cc988f57cb51a12337c59e826d1e185ce6b20b49de8e9e50a4
+              1,134,552 bytes  sha256 23da0a24f440e8004372e7842a4c8c4f63c2e2313b8f145a4a0555dd0f024886
   entry point 8 of 8 fixed entry points, all resolved (listed below; a missing one aborts the run)
   technique   B: none (angr default BFS) | C: ManagedCallExplorer | C1, C2: ablations of C
   models installed

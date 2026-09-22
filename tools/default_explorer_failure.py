@@ -63,8 +63,7 @@ def main():
     print(f"  {sample}")
 
     # Some packed .NET samples cannot be loaded at all: CLE's PE relocation
-    # handling throws before a Project even exists. That is a result, not an
-    # error to swallow, so it is recorded and then worked around.
+    # handling throws before a Project exists. Recorded, then worked around.
     load_kwargs = {"auto_load_libs": False}
     try:
         proj = angr.Project(sample, **load_kwargs)
@@ -87,8 +86,8 @@ def main():
     print("\n  identical -> not a search-strategy failure")
 
     rule("2. CFG COVERAGE")
-    # angr's own verdict on the file is part of the evidence, so the warnings
-    # CFGFast raises are reported here rather than left on stderr.
+    # The warnings CFGFast raises are reported here rather than left on
+    # stderr.
     cap.records.clear()
     cfg = proj.analyses.CFGFast()
     for lvl, r in cap.records:

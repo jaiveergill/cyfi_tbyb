@@ -146,12 +146,9 @@ class UnconstrainedFunction(angr.SimProcedure):
     def run(self, *args):  # pylint:disable=arguments-differ
         ret = claripy.BVS(f"{self.label}_unconstrained", self.retbits)
         if self.bounded:
-            # A fully symbolic return is wrong for a method whose result is
-            # branched on or called through: the value propagates into the
-            # program counter and the state goes unconstrained. Bounding it to
-            # {0,1} keeps boolean results forking both ways while making
-            # pointer-shaped uses resolve to null rather than to an arbitrary
-            # address.
+            # Bounded to {0,1}: boolean results still fork both ways, and a
+            # pointer-shaped use resolves to null instead of an arbitrary
+            # address that would go into the program counter.
             self.state.solver.add(claripy.ULE(ret, 1))
         return ret
 

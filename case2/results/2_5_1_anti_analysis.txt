@@ -1,15 +1,15 @@
 ==========================================================================
 2.5.1 (case 2)  ANTI-ANALYSIS IN THANOS: a build whose checks are mostly switched off
 ==========================================================================
-  generated   2026-09-21 17:37:37 UTC
-  revision    83a68d8+dirty
-  source hash 0437d0a2536fd211  (anti_analysis.py, aot_bridge.py, callsite_map.py, managed_call_explorer.py, managed_runtime.py)
+  generated   2026-09-22 05:24:04 UTC
+  revision    8cba7ba+dirty
+  source hash 55bd490445519553  (anti_analysis.py, aot_bridge.py, callsite_map.py, managed_call_explorer.py, managed_runtime.py)
   environment python 3.12.3, angr 9.3.4, cle 9.3.4, pyvex 9.3.4, dnfile 0.18.0, mono 6.8.0.105
               Linux-6.8.0-139-generic-aarch64-with-glibc2.39  (aarch64)
   artifact    case2/samples/extracted/thanos.exe
               84,480 bytes  sha256 58bfb9fa8889550d13f42473956dc2a7ec4f3abb18fd3faeaa38089d513c171f
   artifact    case2/samples/extracted/thanos.exe.so
-              422,600 bytes  sha256 6d1bc4dd02ec8cc450ac17f13a1b62b06c7afaf985dc54f0a267940b25070cbc
+              422,600 bytes  sha256 93e1fcb4150c57af2f4507ff0cb092f44cb5116971b67b54f62524b68f2db0b4
   entry point 4 methods carrying a check; .cctor for the config
   technique   ManagedCallExplorer in both arms
   models installed

@@ -56,9 +56,7 @@ FIXTURES = {
     "System_Environment_get_MachineName": "<Environment.MachineName>",
     # Not a timestamp. The CIL shows this method querying WMI twice and
     # concatenating the results: win32_processor -> processorID, and
-    # win32_logicaldisk.deviceid="C:" -> VolumeSerialNumber. The FTP filename
-    # therefore carries a hardware fingerprint of the victim machine, which is
-    # a more specific behaviour than a timestamp would be.
+    # win32_logicaldisk.deviceid="C:" -> VolumeSerialNumber.
     "MufMaOSvGyvz_MfnxCHhUwIjyzc_HHmRdTUQTZoj": "<cpuid+volumeserial>",
     "System_Net_WebClient_DownloadString_string": "<icanhazip-response>",
 }
@@ -90,7 +88,7 @@ def run(use_technique):
     t0 = time.time()
     steps, peak = T.walk(simgr, BUDGET)
 
-    # A second, smaller outbound path, for contrast: the connectivity probe.
+    # The connectivity probe, a second outbound path.
     probe_caps = []
     rt2, _ = T.build(T.base_models(captures=probe_caps), FIXTURES)
     for name, addr in rt2.syms.items():

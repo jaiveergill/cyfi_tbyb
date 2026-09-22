@@ -122,9 +122,7 @@ def _name_matches(native: str, owner, method) -> bool:
     if owner:
         last = owner.rsplit(".", 1)[-1]
         if last.lower() not in low:
-            # generic instantiations spell the owner differently; the method
-            # name alone is then the only evidence, which is weaker but still
-            # an anchor when it is unique in the gap.
+            # Generic instantiations spell the owner differently.
             return False
     return True
 
@@ -239,19 +237,15 @@ def cil_calls(body, resolve):
             if text.startswith('"') and text.endswith('"'):
                 out.append((insn.offset - body.offset, "ldstr", None, text[1:-1], None))
         elif name in INDIRECT_OPS:
-            # `stelem.ref` is not a call in CIL, but mono compiles it into one:
-            # the array-store write barrier and covariance check are reached
-            # through the array's own vtable, exactly like a `callvirt`
-            # (`ldr x3,[arr]; ldr x16,[x3,#0x108]; blr x16`). Counting it as a
-            # call is what keeps the alignment honest -- without it every array
-            # store steals the identity of whatever CIL call came next, which on
-            # Thanos mislabelled 210 sites.
+            # `stelem.ref` is not a call in CIL, but mono compiles it into
+            # one: the array-store write barrier and covariance check go
+            # through the array's own vtable, like a `callvirt`
+            # (`ldr x3,[arr]; ldr x16,[x3,#0x108]; blr x16`).
             out.append((insn.offset - body.offset, "indirect-op", None, name, None))
         elif name in GOT_USERS:
             # These also read the GOT -- a static field's storage, a type's
-            # vtable, a method pointer. They claim no literal, but they occupy a
-            # slot load, so counting them is what lets a gap that mixes them
-            # with an `ldstr` still add up.
+            # vtable, a method pointer. They occupy a slot load but claim no
+            # literal.
             out.append((insn.offset - body.offset, "gotuser", None, name, None))
     return out
 
@@ -286,9 +280,8 @@ def align(nat, cil, slot_of=None):
             # allocation helpers anchor onto `newobj`, which is a real CIL
             # instruction; everything else mono-internal is skipped.
             if any(mk in sym for mk in ALLOC_MARKERS):
-                # `newarr` allocates too. Looking only for `newobj` sends the
-                # cursor past every array store in the method, which is what
-                # collapsed Thanos's exfiltration routine into one 9-site gap.
+                # `newarr` allocates too; searching only for `newobj` sends
+                # the cursor past every array store in the method.
                 want = ("newarr",) if "Vector" in sym or "Array" in sym \
                     else ("newobj", "newarr")
                 k = next((x for x in range(j, len(cil))
@@ -331,12 +324,11 @@ def align(nat, cil, slot_of=None):
                                  "how": how})
             continue
 
-        # The gap does not close as a whole. A site inside it can still be
-        # settled on its own, when exactly one candidate in the gap is known --
-        # from everywhere else in the image -- to be dispatched through the slot
-        # this site reads. Mono lays a loop body out after the loop header, so
-        # address order and IL order disagree inside a `foreach`, which is what
-        # breaks the whole-gap pairing; the slot does not care about layout.
+        # The gap does not close as a whole. A site can still be settled on
+        # its own when exactly one candidate in the gap is known image-wide to
+        # use the slot this site reads. Mono lays a loop body out after the
+        # loop header, so address order and IL order can disagree in a
+        # `foreach`.
         claimed = set()
         for addr, slot in sites:
             if slot is None:
@@ -362,8 +354,8 @@ def align(nat, cil, slot_of=None):
     #     runtime would fill with a MonoString*; the image leaves it null. The
     #     slot offset is stable image-wide, so pairing the GOT loads in an
     #     anchor gap with the `ldstr` literals in the same gap recovers what
-    #     each slot holds -- and the same slot recurring in other methods with
-    #     the same literal is the check that the pairing is right.
+    #     each slot holds. The same slot recurring elsewhere with the same
+    #     literal is the check.
     literals = []
     for (ni0, ci0), (ni1, ci1) in zip(bounds, bounds[1:]):
         a0 = nat[ni0][1] if ni0 >= 0 else -1
@@ -482,8 +474,8 @@ def build(exe_path, so_path=None, method_filter=None, passes=2):
             for lt in lits:
                 lt["in"] = name
                 report["literals"].append(lt)
-        # Learn the slot table for the next pass: only callees that were
-        # unanimous are trusted; a token seen in two slots teaches nothing.
+        # Learn the slot table for the next pass, from callees that resolve
+        # to a single slot.
         seen = collections.defaultdict(collections.Counter)
         for r in report["resolved"]:
             if r.get("token") is not None:

@@ -163,14 +163,9 @@ def main():
         print(json.dumps(measure(sys.argv[1])))
         return
 
-    # Every measurement below constructs its own angr Project. Done in one
-    # interpreter that is not safe: angr and CLE keep process-global state
-    # across Project construction, and the second construction in a process can
-    # give a different answer from the first. Measured on the soundness check
-    # with angr's default memory model -- three fresh processes gave (24, 23, 1)
-    # every time, while three runs inside one process gave 24, then 279, then
-    # 24. The comparison scripts already fork per arm for this reason; this one
-    # now does the same.
+    # One process per measurement. angr and CLE keep process-global state
+    # across Project construction, so a second construction in the same
+    # interpreter can give a different answer from the first.
     R = collect()
     loss = R["loss"]
     steps, where = loss["steps"], loss["where"]
